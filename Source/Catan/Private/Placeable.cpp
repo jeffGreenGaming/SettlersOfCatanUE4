@@ -12,6 +12,7 @@ APlaceable::APlaceable()
 	bReplicates = true;
 	bReplicateMovement = true;
 	bAlwaysRelevant = true;
+	Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	ownerNum = 0;
 
 }
