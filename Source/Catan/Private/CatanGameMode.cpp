@@ -71,6 +71,16 @@ void  ACatanGameMode::StartPlay() {
 		}
 	}
 
+	/*ACatanGameState * gameState = (ACatanGameState *)GameState;
+	TArray<APlayerState *> players = gameState->PlayerArray;
+
+	for (int i = 0; i < NumPlayers; i++) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, TEXT("TEST"));
+		ACatanPlayerState * catanPlayer = dynamic_cast<ACatanPlayerState*>(players[i]);
+		if (catanPlayer !=nullptr) {
+			catanPlayer->setPlayerNum(i + 1);
+		}
+	}*/
 }
 void  ACatanGameMode::InitGame(const FString & MapName, const FString & Options, FString & ErrorMessage) {
 	Super::InitGame(MapName,Options, ErrorMessage);
@@ -79,14 +89,18 @@ void  ACatanGameMode::InitGame(const FString & MapName, const FString & Options,
 
 void ACatanGameMode::PostLogin(APlayerController *NewPlayer) {
 	Super::PostLogin(NewPlayer);
-	ACatanPlayerState * player_state = dynamic_cast<ACatanPlayerState *>(NewPlayer->PlayerState);
-	if (player_state != nullptr) {
-		player_state->setPlayerNum(NumPlayers);
-	}
+
 
 }
 
-
+void ACatanGameMode::GenericPlayerInitialization(AController* Controller) {
+	Super::GenericPlayerInitialization(Controller);
+	ACatanPlayerState * player_state = dynamic_cast<ACatanPlayerState *>(Controller->PlayerState);
+	if (player_state != nullptr) {
+		player_state->setPlayerNum(NumPlayers);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::FromInt(NumPlayers));
+	}
+}
 
 bool ACatanGameMode::isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum) {
 	ACatanGameState * gameState = (ACatanGameState *)GameState;

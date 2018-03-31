@@ -45,6 +45,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameModeFunctions")
 	void endTurn();
 
+	void GenericPlayerInitialization(AController* Controller) override;
+
 	EGamePhase getGamePhase();
 
 private:
