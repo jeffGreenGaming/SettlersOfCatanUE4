@@ -2,6 +2,7 @@
 
 #include "Catan.h"
 #include "CatanGameState.h"
+#include "CatanGameMode.h"
 #include "CatanPlayerState.h"
 
 
@@ -68,16 +69,16 @@ void ACatanPlayerState::payForPurchase(EPurchaseType type) {
 	FResources placeableCost;
 	switch (type) {
 		case EPurchaseType::Purchase_Settlement:
-			placeableCost = ACatanGameState::settlementCost;
+			placeableCost = ACatanGameMode::settlementCost;
 			break;
 		case EPurchaseType::Purchase_City:
-			placeableCost = ACatanGameState::cityCost;
+			placeableCost = ACatanGameMode::cityCost;
 			break;
 		case EPurchaseType::Purchase_Road:
-			placeableCost = ACatanGameState::roadCost;
+			placeableCost = ACatanGameMode::roadCost;
 			break;
 		case EPurchaseType::Purchase_DevelopmentCard:
-			placeableCost = ACatanGameState::developmentCardCost;
+			placeableCost = ACatanGameMode::developmentCardCost;
 			break;
 		default:
 			return;

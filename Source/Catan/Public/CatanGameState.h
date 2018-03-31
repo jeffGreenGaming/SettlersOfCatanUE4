@@ -13,6 +13,8 @@
 /**
  * 
  */
+
+
 UCLASS()
 class CATAN_API ACatanGameState : public AGameState
 {
@@ -20,27 +22,20 @@ class CATAN_API ACatanGameState : public AGameState
 
 public:
 
-	static const FResources settlementCost;
-	static const FResources cityCost;
-	static const FResources roadCost;
-	static const FResources developmentCardCost;
+
 
 	ACatanGameState();
 	virtual void BeginPlay() override;
 
-	bool isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex);
-
-	bool isValidRoadPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
-
-	bool canAfford(FResources playerResources, EPurchaseType type);
-
 	ATile * getTileFromCoordinates(uint32 row, uint32 col);
-
-	void endTurn();
 
 	void giveOutResources(uint8 rollNumber);
 
 	bool isMyTurn(uint8 playerNum);
+
+	void setPlayerTurn(uint8 playerNum);
+
+	uint8 getPlayerTurn();
 
 private:
 

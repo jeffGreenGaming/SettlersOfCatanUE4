@@ -223,7 +223,8 @@ void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * playe
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		gameState->endTurn();
+		ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+		gameMode->endTurn();
 		uint8 rollValue = FMath::RandRange(1, 6) + FMath::RandRange(1, 6);
 		gameState->giveOutResources(rollValue);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::FromInt(rollValue));
@@ -251,11 +252,12 @@ bool ACatanPlayerController::setHUD_Validate(TSubclassOf<class UCatanWidget> new
 void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
 
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+
 	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
 	if (selectedTile != nullptr) {
-
+		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 		if (player_state != nullptr && player_state->getNumSettlementsLeft() > 0 &&
-			gameState->isValidSettlementPlacement(row, col, vertex) && gameState->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
+			gameMode->isValidSettlementPlacement(row, col, vertex) && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
 			
 			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
 			FActorSpawnParameters spawnInfo;
@@ -289,10 +291,10 @@ void ACatanPlayerController::SpawnCity_Implementation(uint8 row, uint8 col, EVer
 	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
 
 	if (selectedTile != nullptr) {
-
+		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 		ASettlement * settlement = dynamic_cast<ASettlement *>(selectedTile->getPlaceableOnVertex(vertex));
 		if (gameState != nullptr && player_state != nullptr && player_state->getNumCitiesLeft() > 0 && settlement != nullptr
-			  && settlement->getOwnerNum() == player_state->getPlayerNum() && gameState->canAfford(player_state->getResources(), EPurchaseType::Purchase_City)) {
+			  && settlement->getOwnerNum() == player_state->getPlayerNum() && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_City)) {
 
 			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
 			FActorSpawnParameters spawnInfo;
@@ -328,10 +330,10 @@ void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVer
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
 	if (selectedTile != nullptr) {
-
+		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 		if (player_state != nullptr && player_state->getNumRoadsLeft() > 0 &&
-			gameState->isValidRoadPlacement(row, col, vertex, player_state->getPlayerNum()) && 
-			gameState->canAfford(player_state->getResources(), EPurchaseType::Purchase_Road)) {
+			gameMode->isValidRoadPlacement(row, col, vertex, player_state->getPlayerNum()) && 
+			gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Road)) {
 
 			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
 			FActorSpawnParameters spawnInfo;

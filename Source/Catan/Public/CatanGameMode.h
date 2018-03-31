@@ -9,12 +9,13 @@
 #include "CatanPlayerController.h"
 #include "CatanDefaultCharacter.h"
 #include "CatanPlayerState.h"
-#include "HelperFunctions.h"
+#include "Enums/GamePhase.h"
 #include "CatanGameMode.generated.h"
 
 /**
  * 
  */
+
 
 
 UCLASS()
@@ -24,12 +25,26 @@ class CATAN_API ACatanGameMode : public AGameMode
 
 		
 public:
-
+	static const FResources settlementCost;
+	static const FResources cityCost;
+	static const FResources roadCost;
+	static const FResources developmentCardCost;
 
 	ACatanGameMode();
 	void InitGame(const FString & MapName,const FString & Options,FString & ErrorMessage) override;
 	void StartPlay() override;
 
 	void PostLogin(APlayerController *NewPlayer) override;
+
+	bool isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex);
+
+	bool isValidRoadPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
+
+	bool canAfford(FResources playerResources, EPurchaseType type);
+
+	void endTurn();
+
+private:
+	EGamePhase gamePhase;
 
 };
