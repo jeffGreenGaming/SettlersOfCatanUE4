@@ -36,13 +36,16 @@ public:
 
 	void PostLogin(APlayerController *NewPlayer) override;
 
-	bool isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex);
+	bool isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
 
 	bool isValidRoadPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
 
 	bool canAfford(FResources playerResources, EPurchaseType type);
 
+	UFUNCTION(BlueprintCallable, Category = "GameModeFunctions")
 	void endTurn();
+
+	EGamePhase getGamePhase();
 
 private:
 	EGamePhase gamePhase;

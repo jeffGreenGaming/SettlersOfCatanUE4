@@ -54,7 +54,8 @@ public:
 
 	void RotateRoad();
 
-
+	UFUNCTION(BlueprintCallable, Category = "GameModeFunctions", Reliable, Server, WithValidation)
+	void EndTurnServer();
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void ConfirmRoadServer(uint8 row, uint8 col, EVertex vertex);

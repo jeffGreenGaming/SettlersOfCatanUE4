@@ -33,6 +33,15 @@ void ACatanPlayerController::SetupInputComponent() {
 
 }
 
+void ACatanPlayerController::EndTurnServer_Implementation() {
+	ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->endTurn();
+}
+
+bool ACatanPlayerController::EndTurnServer_Validate() {
+	return true;
+}
+
 void ACatanPlayerController::clickConfirmRoadPlacement() {
 	if (Role == ROLE_Authority) {
 		ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
@@ -63,6 +72,19 @@ void ACatanPlayerController::ConfirmRoadServer_Implementation(uint8 row, uint8 c
 		currentPlacementArea->addRoadConnection(possibleConnection, lastPlacedRoad);
 		lastPlacedRoad = nullptr;
 		lastPlaceRoadConnectionIndex = 0;
+
+		ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+		//set custom UI for placement phase
+		if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1) {
+			UClass* placementRoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementSettlementUI.PlacementSettlementUI_C"));
+			setHUD(placementRoadUI);
+		}
+		//go to main game UI
+		else if(gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
+			UClass* placementRoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/MainUI.MainUI_C"));
+			setHUD(placementRoadUI);
+		}
+
 	}
 }
 
@@ -257,7 +279,7 @@ void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col
 	if (selectedTile != nullptr) {
 		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 		if (player_state != nullptr && player_state->getNumSettlementsLeft() > 0 &&
-			gameMode->isValidSettlementPlacement(row, col, vertex) && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
+			gameMode->isValidSettlementPlacement(row, col, vertex,player_state->getPlayerNum()) && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
 			
 			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
 			FActorSpawnParameters spawnInfo;
@@ -273,6 +295,12 @@ void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col
 			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
 			for (int i = 0; i < connectedTiles.Num(); i++) {
 				player_state->addPerRoll(connectedTiles[i]->getRollVal(),connectedTiles[i]->getTileType());
+			}
+
+			//if we are in the intial placing phases of the game we need special HUD cycles
+			if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1 || gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
+				UClass* placementRoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementRoadUI.PlacementRoadUI_C"));
+				setHUD(placementRoadUI);
 			}
 
 			selectedTile->addPlaceableOnVertex(vertex, settlement);
@@ -348,8 +376,15 @@ void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVer
 			player_state->addRoad(road);
 			player_state->payForPurchase(EPurchaseType::Purchase_Road);
 
-			UClass* roadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RoadUI.RoadUI_C"));
-			setHUD(roadUI);
+			//if we are in the intial placing phases of the game we need special HUD cycles
+			if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1 || gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
+				UClass* RoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementConfirmRoadUI.PlacementConfirmRoadUI_C"));
+				setHUD(RoadUI);
+			}
+			else {
+				UClass* roadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RoadUI.RoadUI_C"));
+				setHUD(roadUI);
+			}
 
 		}
 	}

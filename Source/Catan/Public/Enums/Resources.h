@@ -14,14 +14,14 @@ struct FResources {
 	uint8 numBrick;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-		uint8 numStone;
+	uint8 numStone;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-		uint8 numWood;
+	uint8 numWood;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-		uint8 numSheep;
+	uint8 numSheep;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-		uint8 numWheat;
+	uint8 numWheat;
 };

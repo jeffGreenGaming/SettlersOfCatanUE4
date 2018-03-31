@@ -88,7 +88,7 @@ void ACatanGameMode::PostLogin(APlayerController *NewPlayer) {
 
 
 
-bool ACatanGameMode::isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex) {
+bool ACatanGameMode::isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum) {
 	ACatanGameState * gameState = (ACatanGameState *)GameState;
 	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
 
@@ -152,6 +152,7 @@ bool ACatanGameMode::isValidSettlementPlacement(uint8 selectionRow, uint8 select
 		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_TopRight);
 		break;
 	}
+	bIsValid = bIsValid && (selectedTile->isVertexConnected(selectionVertex, playerNum) || gamePhase != EGamePhase::GamePhase_MainGame);
 	return bIsValid;
 
 
@@ -222,4 +223,9 @@ void ACatanGameMode::endTurn() {
 		gameState->setPlayerTurn(currentPlayerTurn);
 
 	}
+}
+
+EGamePhase ACatanGameMode::getGamePhase() {
+	return gamePhase;
+
 }

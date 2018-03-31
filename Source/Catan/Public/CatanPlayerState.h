@@ -77,6 +77,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TArray<FResources> perRollIncreases;
 
+	UPROPERTY(replicated)
 	uint8 playerNum;
 	
 };

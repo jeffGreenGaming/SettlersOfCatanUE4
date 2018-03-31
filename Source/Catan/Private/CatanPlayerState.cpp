@@ -10,7 +10,8 @@
 
 ACatanPlayerState::ACatanPlayerState() : numSettlementsLeft(5), numCitiesLeft(4), numRoadsLeft(20){
 	bReplicates = true;
-	resources = { 5,5,5,5,5 };
+	//resources = { 4,0,4,2,2 }; //give enough resources for intial placements
+	resources = { 10,10,10,10,10 };
 	uint8 numPossibleRolls = 12;
 	for (int i = 0; i <= numPossibleRolls; i++) {
 		perRollIncreases.Add({ 0,0,0,0,0 });
@@ -21,6 +22,7 @@ void ACatanPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > &
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ACatanPlayerState, resources);
+	DOREPLIFETIME(ACatanPlayerState, playerNum);
 
 }
 

@@ -5,7 +5,7 @@
 
 ACatanHUD::ACatanHUD() {
 
-	static ConstructorHelpers::FClassFinder<UCatanWidget> WidgetAsset(TEXT("/Game/Content/Blueprints/UI/MainUI"));
+	static ConstructorHelpers::FClassFinder<UCatanWidget> WidgetAsset(TEXT("/Game/Content/Blueprints/UI/PlacementSettlementUI"));
 	if (WidgetAsset.Succeeded())
 	{
 		WidgetClass = WidgetAsset.Class;
