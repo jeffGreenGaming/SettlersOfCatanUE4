@@ -71,12 +71,27 @@ void  ACatanGameMode::StartPlay() {
 		}
 	}
 
+	/*ACatanGameState * gameState = (ACatanGameState *)GameState;
+	TArray<APlayerState *> players = gameState->PlayerArray;
+
+	for (int i = 0; i < NumPlayers; i++) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, TEXT("TEST"));
+		ACatanPlayerState * catanPlayer = dynamic_cast<ACatanPlayerState*>(players[i]);
+		if (catanPlayer !=nullptr) {
+			catanPlayer->setPlayerNum(i + 1);
+		}
+	}*/
 }
 void  ACatanGameMode::InitGame(const FString & MapName, const FString & Options, FString & ErrorMessage) {
 	Super::InitGame(MapName,Options, ErrorMessage);
 
 }
 
+void ACatanGameMode::PostLogin(APlayerController *NewPlayer) {
+	Super::PostLogin(NewPlayer);
+
+
+}
 
 void ACatanGameMode::GenericPlayerInitialization(AController* Controller) {
 	Super::GenericPlayerInitialization(Controller);

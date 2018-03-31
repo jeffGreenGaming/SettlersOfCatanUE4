@@ -34,6 +34,8 @@ public:
 	void InitGame(const FString & MapName,const FString & Options,FString & ErrorMessage) override;
 	void StartPlay() override;
 
+	void PostLogin(APlayerController *NewPlayer) override;
+
 	bool isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
 
 	bool isValidRoadPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
