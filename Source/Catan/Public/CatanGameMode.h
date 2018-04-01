@@ -25,6 +25,7 @@ class CATAN_API ACatanGameMode : public AGameMode
 
 		
 public:
+
 	static const FResources settlementCost;
 	static const FResources cityCost;
 	static const FResources roadCost;
@@ -40,7 +41,6 @@ public:
 
 	bool canAfford(FResources playerResources, EPurchaseType type);
 
-	UFUNCTION(BlueprintCallable, Category = "GameModeFunctions")
 	void endTurn();
 
 	void GenericPlayerInitialization(AController* Controller) override;
