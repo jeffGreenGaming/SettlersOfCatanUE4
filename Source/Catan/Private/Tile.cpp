@@ -11,7 +11,6 @@ ATile::ATile()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject < UStaticMeshComponent>(TEXT("TileMesh"));
-	FString path = "/Game/Content/Meshes/NoMaterialTile.NoMaterialTile";
 	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/NoMaterialTile.NoMaterialTile"));
 	Mesh->SetStaticMesh(MeshRef.Object);
 	bReplicates = true;

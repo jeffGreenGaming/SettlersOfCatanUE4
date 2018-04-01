@@ -10,6 +10,11 @@ class CATAN_API ADevelopmentCard : public AActor
 {
 	GENERATED_BODY()
 	
+
+protected:
+	UPROPERTY()
+	UStaticMeshComponent* Mesh;
+
 public:	
 	// Sets default values for this actor's properties
 	ADevelopmentCard();
