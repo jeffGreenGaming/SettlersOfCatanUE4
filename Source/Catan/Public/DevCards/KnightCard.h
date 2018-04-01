@@ -12,8 +12,9 @@ UCLASS()
 class CATAN_API AKnightCard : public ADevelopmentCard
 {
 	GENERATED_BODY()
-	
-	
+
+public:
+	AKnightCard();
 	
 	
 };

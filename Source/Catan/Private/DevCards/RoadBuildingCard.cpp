@@ -4,5 +4,8 @@
 #include "RoadBuildingCard.h"
 
 
-
+ARoadBuildingCard::ARoadBuildingCard() {
+	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/RoadBuildingCard.RoadBuildingCard"));
+	Mesh->SetStaticMesh(MeshRef.Object);
+}
 

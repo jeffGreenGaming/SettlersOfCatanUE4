@@ -13,7 +13,9 @@ class CATAN_API AYearOfPlentyCard : public ADevelopmentCard
 {
 	GENERATED_BODY()
 	
-	
+public:
+
+	AYearOfPlentyCard();
 	
 	
 };

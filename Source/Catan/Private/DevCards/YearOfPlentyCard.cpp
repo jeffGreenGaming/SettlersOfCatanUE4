@@ -4,5 +4,8 @@
 #include "YearOfPlentyCard.h"
 
 
-
+AYearOfPlentyCard::AYearOfPlentyCard() {
+	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/YearOfPlentyCard.YearOfPlentyCard"));
+	Mesh->SetStaticMesh(MeshRef.Object);
+}
 

@@ -13,7 +13,8 @@ class CATAN_API ARoadBuildingCard : public ADevelopmentCard
 {
 	GENERATED_BODY()
 	
-	
+public:
+	ARoadBuildingCard();
 	
 	
 };

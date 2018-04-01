@@ -13,7 +13,8 @@ class CATAN_API AMonopolyCard : public ADevelopmentCard
 {
 	GENERATED_BODY()
 	
-	
+public:
+	AMonopolyCard();
 	
 	
 };

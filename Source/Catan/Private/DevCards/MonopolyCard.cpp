@@ -6,3 +6,7 @@
 
 
 
+AMonopolyCard::AMonopolyCard() {
+	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/MonopolyCard.MonopolyCard"));
+	Mesh->SetStaticMesh(MeshRef.Object);
+}

@@ -13,7 +13,7 @@ class CATAN_API AVictoryPointCard : public ADevelopmentCard
 {
 	GENERATED_BODY()
 	
-	
-	
+public:
+	AVictoryPointCard();
 	
 };
