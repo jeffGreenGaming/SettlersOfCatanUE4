@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Catan.h"
 #include "PlaceableArea.h"
+#include "Enums/DevCardType.h"
 #include "CatanGameMode.h"
 
 // numBrick, numStone, numWood, numSheep, numWheat
@@ -21,14 +22,28 @@ ACatanGameMode::ACatanGameMode() {
 void  ACatanGameMode::StartPlay() {
 
 	Super::StartPlay();
-	FVector Location(-170.0f, 20.0f, 110.0f);
-	FRotator Rotation(0.0f, 0.0f, 0.0f);
-	FActorSpawnParameters SpawnInfo;
+	uint8 numRollValues = 18;
+
 
 	TArray<AActor*> Tiles;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATile::StaticClass(), Tiles);
 
 	int rollValues[18] = { 2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12 };
+
+	TArray<EDevCardType> devCardTypes;
+	for (int i = 0; i < 14; i++) {
+		devCardTypes.Add(EDevCardType::DevCardType_Knight);
+	}
+
+	for (int i = 0; i < 5; i++) {
+		devCardTypes.Add(EDevCardType::DevCardType_VictoryPoints);
+	}
+
+	for (int i = 0; i < 2; i++) {
+		devCardTypes.Add(EDevCardType::DevCardType_YearOfPlenty);
+		devCardTypes.Add(EDevCardType::DevCardType_RoadBuilding);
+		devCardTypes.Add(EDevCardType::DevCardType_Monopoly);
+	}
 
 	// use these so replicated properties only updated once -- represents the future tile types
 	EResourceType swapTileTypes[19] = {
@@ -42,8 +57,8 @@ void  ACatanGameMode::StartPlay() {
 
 	for (int i = 0; i < 100; i++) {
 
-		int SwapRoll1 = FMath::RandRange(0, 18 - 1);
-		int SwapRoll2 = FMath::RandRange(0, 18 - 1);
+		int SwapRoll1 = FMath::RandRange(0, numRollValues - 1);
+		int SwapRoll2 = FMath::RandRange(0, numRollValues - 1);
 
 		int tempRoll = rollValues[SwapRoll1];
 		rollValues[SwapRoll1] = rollValues[SwapRoll2];
@@ -56,6 +71,10 @@ void  ACatanGameMode::StartPlay() {
 		swapTileTypes[SwapTile1] = swapTileTypes[SwapTile2];
 		swapTileTypes[SwapTile2] = tempSwap;
 
+		int SwapDev1 = FMath::RandRange(0, devCardTypes.Num() - 1);
+		int SwapDev2 = FMath::RandRange(0, devCardTypes.Num() - 1);
+
+		devCardTypes.Swap(SwapDev1, SwapDev2);
 
 	}
 
@@ -69,6 +88,11 @@ void  ACatanGameMode::StartPlay() {
 				rollCount++;
 			}
 		}
+	}
+
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	if (gameState != nullptr) {
+		gameState->setDevelopmentCards(devCardTypes);
 	}
 
 }

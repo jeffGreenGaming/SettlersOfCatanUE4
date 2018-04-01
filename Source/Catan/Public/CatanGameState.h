@@ -7,6 +7,8 @@
 #include "Tile.h"
 #include "Enums/Resources.h"
 #include "Enums/PurchaseType.h"
+#include "Enums/DevCardType.h"
+#include "DevelopmentCard.h"
 #include "CatanGameState.generated.h"
 
 
@@ -37,12 +39,16 @@ public:
 
 	uint8 getPlayerTurn();
 
+	void setDevelopmentCards(TArray<EDevCardType> cards);
+
 private:
 
 	TArray<ATile *> tiles;
 
 	UPROPERTY(replicated)
 	uint8 currentPlayerTurn;
+
+	TArray<EDevCardType> developmentCards;
 	
 	
 	

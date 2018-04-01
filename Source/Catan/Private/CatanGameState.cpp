@@ -21,6 +21,8 @@ void ACatanGameState::BeginPlay() {
 		ATile * tile = dynamic_cast<ATile*>(Tiles[i]);
 		tiles.Add(tile);
 	}
+
+
 }
 
 
@@ -63,4 +65,8 @@ void ACatanGameState::setPlayerTurn(uint8 playerNum) {
 
 uint8 ACatanGameState::getPlayerTurn() {
 	return currentPlayerTurn;
+}
+
+void ACatanGameState::setDevelopmentCards(TArray<EDevCardType> cards) {
+	developmentCards = cards;
 }
