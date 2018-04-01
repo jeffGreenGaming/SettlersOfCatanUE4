@@ -22,6 +22,7 @@ ACatanGameMode::ACatanGameMode() {
 void  ACatanGameMode::StartPlay() {
 
 	Super::StartPlay();
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
 	uint8 numRollValues = 18;
 
 
@@ -87,10 +88,22 @@ void  ACatanGameMode::StartPlay() {
 				tile->setRollValue(rollValues[rollCount]);
 				rollCount++;
 			}
+			else {
+				FActorSpawnParameters SpawnInfo;
+				AStaticMeshActor * Robber = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), tile->GetActorLocation() + FVector(0.0f, 0.0f, 0.5f), FRotator(0.0f, 0.0f, 0.0f), SpawnInfo);
+				Robber->SetReplicates(true);
+				UStaticMesh * newMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/Content/Meshes/robber.robber'")));
+				UStaticMeshComponent * mesh = Robber->GetStaticMeshComponent();
+				mesh->SetMobility(EComponentMobility::Movable);
+				mesh->SetStaticMesh(newMesh);
+				mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+				mesh->SetStaticMesh(newMesh);
+				gameState->setRobber(Robber);
+			}
 		}
 	}
 
-	ACatanGameState * gameState = (ACatanGameState *)GameState;
+
 	if (gameState != nullptr) {
 		gameState->setDevelopmentCards(devCardTypes);
 	}

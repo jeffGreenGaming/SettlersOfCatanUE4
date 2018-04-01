@@ -27,6 +27,7 @@ public:
 
 
 	ACatanGameState();
+
 	virtual void BeginPlay() override;
 
 	ATile * getTileFromCoordinates(uint32 row, uint32 col);
@@ -41,7 +42,12 @@ public:
 
 	void setDevelopmentCards(TArray<EDevCardType> cards);
 
+	void setRobber(AStaticMeshActor* newRobber);
+
 private:
+
+	UPROPERTY(replicated)
+	AStaticMeshActor* Robber;
 
 	TArray<ATile *> tiles;
 
@@ -50,6 +56,6 @@ private:
 
 	TArray<EDevCardType> developmentCards;
 	
-	
+
 	
 };

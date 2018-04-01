@@ -21,8 +21,6 @@ void ACatanGameState::BeginPlay() {
 		ATile * tile = dynamic_cast<ATile*>(Tiles[i]);
 		tiles.Add(tile);
 	}
-
-
 }
 
 
@@ -56,6 +54,8 @@ void ACatanGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ACatanGameState, currentPlayerTurn);
+	DOREPLIFETIME(ACatanGameState, Robber);
+	
 }
 
 
@@ -69,4 +69,9 @@ uint8 ACatanGameState::getPlayerTurn() {
 
 void ACatanGameState::setDevelopmentCards(TArray<EDevCardType> cards) {
 	developmentCards = cards;
+}
+
+
+void ACatanGameState::setRobber(AStaticMeshActor* newRobber) {
+	Robber = newRobber;
 }
