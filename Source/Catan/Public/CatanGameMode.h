@@ -32,7 +32,8 @@ public:
 	static const FResources developmentCardCost;
 
 	ACatanGameMode();
-	void InitGame(const FString & MapName,const FString & Options,FString & ErrorMessage) override;
+
+
 	void StartPlay() override;
 
 	bool isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum);
