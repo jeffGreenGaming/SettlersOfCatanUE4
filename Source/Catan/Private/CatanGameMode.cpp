@@ -248,7 +248,6 @@ void ACatanGameMode::endTurn() {
 				currentPlayerTurn++;
 				if (currentPlayerTurn > gameState->PlayerArray.Num()) {
 					currentPlayerTurn = 1;
-					gamePhase = EGamePhase::GamePhase_Placement2;
 				}
 				break;
 		}
