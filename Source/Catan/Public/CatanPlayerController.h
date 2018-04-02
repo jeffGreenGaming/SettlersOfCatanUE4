@@ -83,6 +83,9 @@ public:
 	UFUNCTION(Reliable, Server, WithValidation)
 	void RollServer(ACatanPlayerState * player_state);
 
+	UFUNCTION(Reliable, Server, WithValidation)
+	void MoveRobberServer(uint8 row, uint8 col, EVertex vertex);
+
 	void UpdateSelection();
 
 	void RotateRoad();

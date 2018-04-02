@@ -198,3 +198,10 @@ EGamePhase ACatanGameMode::getGamePhase() {
 	return gamePhase;
 
 }
+
+void ACatanGameMode::moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex) {
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
+	gameState->moveRobberLocation(selectedTile->GetActorLocation() + FVector(0.0f,0.0f,0.5f));
+
+}

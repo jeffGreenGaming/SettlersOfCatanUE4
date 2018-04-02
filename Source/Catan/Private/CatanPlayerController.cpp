@@ -87,7 +87,7 @@ void ACatanPlayerController::clickConfirmRoadPlacement() {
 }
 
 void ACatanPlayerController::clickMoveRobber() {
-
+	MoveRobberServer(selectionRow, selectionCol, selectedVertex);
 }
 
 void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {
@@ -354,8 +354,7 @@ void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * playe
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
-		gameMode->endTurn();
+		EndTurnServer();
 		uint8 rollValue = FMath::RandRange(1, 6) + FMath::RandRange(1, 6);
 		if (rollValue == 7) {
 			UClass* robberUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RobberUI.RobberUI_C"));
@@ -367,6 +366,15 @@ void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * playe
 }
 
 bool ACatanPlayerController::RollServer_Validate(ACatanPlayerState * player_state) {
+	return true;
+}
+
+void ACatanPlayerController::MoveRobberServer_Implementation(uint8 row, uint8 col, EVertex vertex) {
+	ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->moveRobber(row, col, vertex);
+}
+
+bool ACatanPlayerController::MoveRobberServer_Validate(uint8 row, uint8 col, EVertex vertex) {
 	return true;
 }
 

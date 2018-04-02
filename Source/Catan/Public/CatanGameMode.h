@@ -48,6 +48,8 @@ public:
 
 	EGamePhase getGamePhase();
 
+	void moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex);
+
 private:
 	EGamePhase gamePhase;
 

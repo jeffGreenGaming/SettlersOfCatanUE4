@@ -83,3 +83,8 @@ EDevCardType ACatanGameState::getNextDevCard() {
 	}
 	return returnType;
 }
+
+void ACatanGameState::moveRobberLocation(FVector location) {
+	Robber->SetActorLocation(location);
+
+}

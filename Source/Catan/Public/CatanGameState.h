@@ -48,6 +48,8 @@ public:
 	// hands next deve card back and removes it from deck
 	EDevCardType getNextDevCard();
 
+	void moveRobberLocation(FVector location);
+
 private:
 
 	UPROPERTY(replicated)
