@@ -5,7 +5,6 @@
 #include "GameFramework/PlayerController.h"
 #include "Tile.h"
 #include "CatanDefaultCharacter.h"
-#include "HelperFunctions.h"
 #include "CatanPlayerState.h"
 #include "Road.h"
 #include "CatanWidget.h"
