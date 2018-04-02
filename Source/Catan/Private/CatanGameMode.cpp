@@ -123,71 +123,15 @@ void ACatanGameMode::GenericPlayerInitialization(AController* Controller) {
 bool ACatanGameMode::isValidSettlementPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum) {
 	ACatanGameState * gameState = (ACatanGameState *)GameState;
 	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
-
-	//tiles for each edge -- two needed for each vertex to make sure is a valid placement
-	ATile * topTile = selectedTile->getEdgeTile(ETileEdge::TileEdge_Top);
-	ATile * bottomTile = selectedTile->getEdgeTile(ETileEdge::TileEdge_Bottom);
-	ATile * topRightTile = selectedTile->getEdgeTile(ETileEdge::TileEdge_TopRight);
-	ATile * bottomRightTile = selectedTile->getEdgeTile(ETileEdge::TileEdge_BottomRight);
-	ATile * bottomLeftTile = selectedTile->getEdgeTile(ETileEdge::TileEdge_BottomLeft);
-	ATile * topLeftTile = selectedTile->getEdgeTile(ETileEdge::TileEdge_TopLeft);
-
+	APlaceableArea * selectedPlaceableArea = selectedTile->getPlaceableAreaAtVertex(selectionVertex);
+	TArray<APlaceableArea *> checkablePlaceableAreas = selectedPlaceableArea->getPossibleRoadConnections();
 	bool bIsValid = !selectedTile->getPlaceableOnVertex(selectionVertex);
-	// for each tile, check the 3 connected by the edges of the vertex
-	switch (selectionVertex) {
-	case EVertex::Vertex_TopRight:
-		if (topRightTile != nullptr)
-			bIsValid = bIsValid && !topRightTile->getPlaceableOnVertex(EVertex::Vertex_TopLeft);
-		else if (topTile != nullptr)
-			bIsValid = bIsValid && !topTile->getPlaceableOnVertex(EVertex::Vertex_MiddleRight);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_MiddleRight);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_TopLeft);
-		break;
-	case EVertex::Vertex_MiddleRight:
-		if (topRightTile != nullptr)
-			bIsValid = bIsValid && !topRightTile->getPlaceableOnVertex(EVertex::Vertex_BottomRight);
-		else if (bottomRightTile != nullptr)
-			bIsValid = bIsValid && !bottomRightTile->getPlaceableOnVertex(EVertex::Vertex_TopLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_BottomRight);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_TopRight);
-		break;
-	case EVertex::Vertex_BottomRight:
-		if (bottomRightTile != nullptr)
-			bIsValid = bIsValid && !bottomRightTile->getPlaceableOnVertex(EVertex::Vertex_BottomLeft);
-		else if (bottomTile != nullptr)
-			bIsValid = bIsValid && !bottomTile->getPlaceableOnVertex(EVertex::Vertex_MiddleRight);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_MiddleRight);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_BottomLeft);
-		break;
-	case EVertex::Vertex_BottomLeft:
-		if (bottomLeftTile != nullptr)
-			bIsValid = bIsValid && !bottomLeftTile->getPlaceableOnVertex(EVertex::Vertex_BottomRight);
-		else if (bottomTile != nullptr)
-			bIsValid = bIsValid && !bottomTile->getPlaceableOnVertex(EVertex::Vertex_MiddleLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_MiddleLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_BottomRight);
-		break;
-	case EVertex::Vertex_MiddleLeft:
-		if (topLeftTile != nullptr)
-			bIsValid = bIsValid && !topLeftTile->getPlaceableOnVertex(EVertex::Vertex_BottomLeft);
-		else if (bottomLeftTile != nullptr)
-			bIsValid = bIsValid && !bottomLeftTile->getPlaceableOnVertex(EVertex::Vertex_TopLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_TopLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_BottomLeft);
-		break;
-	case EVertex::Vertex_TopLeft:
-		if (topLeftTile != nullptr)
-			bIsValid = bIsValid && !topLeftTile->getPlaceableOnVertex(EVertex::Vertex_TopRight);
-		else if (topTile != nullptr)
-			bIsValid = bIsValid && !topTile->getPlaceableOnVertex(EVertex::Vertex_MiddleLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_MiddleLeft);
-		bIsValid = bIsValid && !selectedTile->getPlaceableOnVertex(EVertex::Vertex_TopRight);
-		break;
+	for (int i = 0; i < checkablePlaceableAreas.Num(); i++) {
+		if (checkablePlaceableAreas[i]->getTakenStructure() != nullptr) {
+			bIsValid =  false;
+		}
 	}
-	bIsValid = bIsValid && (selectedTile->isVertexConnected(selectionVertex, playerNum) || gamePhase != EGamePhase::GamePhase_MainGame);
-	return bIsValid;
-
-
+	return bIsValid && (selectedTile->isVertexConnected(selectionVertex, playerNum) || gamePhase != EGamePhase::GamePhase_MainGame);
 }
 
 bool ACatanGameMode::isValidRoadPlacement(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex, uint8 playerNum) {
