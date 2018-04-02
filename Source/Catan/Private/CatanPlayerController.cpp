@@ -38,6 +38,64 @@ void ACatanPlayerController::SetupInputComponent() {
 
 }
 
+void ACatanPlayerController::clickPurchase() {
+	inputMode = EInputMode::InputMode_Purchase;
+	highlightTiles();
+}
+
+void ACatanPlayerController::clickBuySettlement() {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
+	if (gameState->isMyTurn(player_state->getPlayerNum())) {
+		SpawnSettlement(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
+	}
+}
+
+void ACatanPlayerController::clickBuyCity() {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
+	if (gameState->isMyTurn(player_state->getPlayerNum())) {
+		SpawnCity(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
+	}
+}
+
+void ACatanPlayerController::clickBuyRoad() {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
+	if (gameState->isMyTurn(player_state->getPlayerNum())) {
+		SpawnRoad(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
+	}
+}
+
+
+void ACatanPlayerController::clickBuyDevCard() {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
+	if (gameState->isMyTurn(player_state->getPlayerNum())) {
+		BuyDevCardServer(dynamic_cast<ACatanPlayerState *>(PlayerState));
+	}
+
+}
+
+void ACatanPlayerController::clickRoll() {
+	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
+	RollServer(player_state);
+}
+
+void ACatanPlayerController::clickConfirmRoadPlacement() {
+	ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
+}
+
+
+void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {
+	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
+	HUD->setHUDClass(newHUD);
+}
+
+bool ACatanPlayerController::setHUD_Validate(TSubclassOf<class UCatanWidget> newHUD) {
+	return true;
+}
+
 void ACatanPlayerController::EndTurnServer_Implementation() {
 	ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 	gameMode->endTurn();
@@ -47,21 +105,6 @@ bool ACatanPlayerController::EndTurnServer_Validate() {
 	return true;
 }
 
-void ACatanPlayerController::BuyDevCardServer_Implementation(ACatanPlayerState * player_state) {
-
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
-	if (player_state != nullptr && gameState != nullptr && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
-
-
-
-		EDevCardType cardType = gameState->getNextDevCard();
-		SpawnDevCardClient(cardType);
-		player_state->payForPurchase(EPurchaseType::Purchase_DevelopmentCard);
-
-	}
-
-}
 
 void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType cardType) {
 
@@ -94,22 +137,26 @@ bool ACatanPlayerController::SpawnDevCardClient_Validate(EDevCardType cardType) 
 	return true;
 }
 
+void ACatanPlayerController::BuyDevCardServer_Implementation(ACatanPlayerState * player_state) {
+
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	if (player_state != nullptr && gameState != nullptr && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
+
+
+
+		EDevCardType cardType = gameState->getNextDevCard();
+		SpawnDevCardClient(cardType);
+		player_state->payForPurchase(EPurchaseType::Purchase_DevelopmentCard);
+
+	}
+
+}
+
+
 bool ACatanPlayerController::BuyDevCardServer_Validate(ACatanPlayerState * player_state) {
 	return true;
 
-}
-
-
-void ACatanPlayerController::clickConfirmRoadPlacement() {
-		ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
-}
-
-void ACatanPlayerController::clickBuyDevCard() {
-	BuyDevCardServer(dynamic_cast<ACatanPlayerState *>(PlayerState));
-}
-
-void ACatanPlayerController::RotateRoad() {
-	RotateRoadServer(selectionRow, selectionCol, selectedVertex);
 }
 
 
@@ -132,7 +179,7 @@ void ACatanPlayerController::ConfirmRoadServer_Implementation(uint8 row, uint8 c
 			setHUD(placementRoadUI);
 		}
 		//go to main game UI
-		else if(gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
+		else if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
 			UClass* placementRoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/MainUI.MainUI_C"));
 			setHUD(placementRoadUI);
 		}
@@ -143,6 +190,7 @@ void ACatanPlayerController::ConfirmRoadServer_Implementation(uint8 row, uint8 c
 bool ACatanPlayerController::ConfirmRoadServer_Validate(uint8 row, uint8 col, EVertex vertex) {
 	return true;
 }
+
 
 void ACatanPlayerController::RotateRoadServer_Implementation(uint8 row, uint8 col, EVertex vertex) {
 
@@ -165,12 +213,153 @@ void ACatanPlayerController::RotateRoadServer_Implementation(uint8 row, uint8 co
 			possibleConnection = possibleConnections[lastPlaceRoadConnectionIndex];
 		}
 		FRotator newRotation = (lastPlacedRoad->GetActorLocation() - possibleConnection->GetActorLocation()).Rotation();
-		lastPlacedRoad->SetActorRotation(newRotation + FRotator(0.0f,90.0f,0.0f));
+		lastPlacedRoad->SetActorRotation(newRotation + FRotator(0.0f, 90.0f, 0.0f));
 
 	}
 }
 
 bool ACatanPlayerController::RotateRoadServer_Validate(uint8 row, uint8 col, EVertex vertex) {
+	return true;
+}
+
+
+void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+
+	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
+	if (selectedTile != nullptr) {
+		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+		if (player_state != nullptr && player_state->getNumSettlementsLeft() > 0 &&
+			gameMode->isValidSettlementPlacement(row, col, vertex, player_state->getPlayerNum()) && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
+
+			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
+			FActorSpawnParameters spawnInfo;
+			FRotator rotation(0.0f, 0.0f, 0.0f);
+
+			ASettlement * settlement = GetWorld()->SpawnActor<ASettlement>(location, rotation, spawnInfo);
+			settlement->setOwnerNum(player_state->getPlayerNum());
+
+			player_state->addSettlement(settlement);
+			player_state->payForPurchase(EPurchaseType::Purchase_Settlement);
+
+			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
+			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
+			for (int i = 0; i < connectedTiles.Num(); i++) {
+				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType());
+			}
+
+			//if we are in the intial placing phases of the game we need special HUD cycles
+			if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1 || gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
+				UClass* placementRoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementRoadUI.PlacementRoadUI_C"));
+				setHUD(placementRoadUI);
+			}
+
+			selectedTile->addPlaceableOnVertex(vertex, settlement);
+		}
+	}
+}
+
+bool ACatanPlayerController::SpawnSettlement_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+	return true;
+}
+
+
+void ACatanPlayerController::SpawnCity_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
+
+	if (selectedTile != nullptr) {
+		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+		ASettlement * settlement = dynamic_cast<ASettlement *>(selectedTile->getPlaceableOnVertex(vertex));
+		if (gameState != nullptr && player_state != nullptr && player_state->getNumCitiesLeft() > 0 && settlement != nullptr
+			&& settlement->getOwnerNum() == player_state->getPlayerNum() && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_City)) {
+
+			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
+			FActorSpawnParameters spawnInfo;
+			FRotator rotation(0.0f, 0.0f, 0.0f);
+
+			ACity * city = GetWorld()->SpawnActor<ACity>(location, rotation, spawnInfo);
+			city->setOwnerNum(player_state->getPlayerNum());
+
+			settlement->Destroy();
+
+			player_state->addCity(city);
+			player_state->payForPurchase(EPurchaseType::Purchase_City);
+
+			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
+			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
+			for (int i = 0; i < connectedTiles.Num(); i++) {
+				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType());
+			}
+
+			selectedTile->addPlaceableOnVertex(vertex, city);
+		}
+	}
+}
+
+bool ACatanPlayerController::SpawnCity_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+	return true;
+}
+
+
+
+void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
+	if (selectedTile != nullptr) {
+		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+		if (player_state != nullptr && player_state->getNumRoadsLeft() > 0 &&
+			gameMode->isValidRoadPlacement(row, col, vertex, player_state->getPlayerNum()) &&
+			gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Road)) {
+
+			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
+			FActorSpawnParameters spawnInfo;
+			FRotator rotation(0.0f, 0.0f, 0.0f);
+
+			ARoad * road = GetWorld()->SpawnActor<ARoad>(location, rotation, spawnInfo);
+			road->setOwnerNum(player_state->getPlayerNum());
+
+			lastPlacedRoad = road;
+			RotateRoadServer(row, col, vertex);
+
+			player_state->addRoad(road);
+			player_state->payForPurchase(EPurchaseType::Purchase_Road);
+
+			//if we are in the intial placing phases of the game we need special HUD cycles
+			if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1 || gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
+				UClass* RoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementConfirmRoadUI.PlacementConfirmRoadUI_C"));
+				setHUD(RoadUI);
+			}
+			else {
+				UClass* roadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RoadUI.RoadUI_C"));
+				setHUD(roadUI);
+			}
+
+		}
+	}
+}
+
+bool ACatanPlayerController::SpawnRoad_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+	return true;
+}
+
+
+void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * player_state) {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+
+	if (gameState->isMyTurn(player_state->getPlayerNum())) {
+		ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+		gameMode->endTurn();
+		uint8 rollValue = FMath::RandRange(1, 6) + FMath::RandRange(1, 6);
+		gameState->giveOutResources(rollValue);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::FromInt(rollValue));
+	}
+}
+
+bool ACatanPlayerController::RollServer_Validate(ACatanPlayerState * player_state) {
 	return true;
 }
 
@@ -198,6 +387,11 @@ void ACatanPlayerController::UpdateSelection() {
 	highlightTiles();
 
 }
+
+void ACatanPlayerController::RotateRoad() {
+	RotateRoadServer(selectionRow, selectionCol, selectedVertex);
+}
+
 
 void ACatanPlayerController::highlightTiles() {
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
@@ -259,193 +453,6 @@ void ACatanPlayerController::highlightTiles() {
 	}
 }
 
-void ACatanPlayerController::clickBuySettlement() {
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
-	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		SpawnSettlement(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
-	}
-}
-
-void ACatanPlayerController::clickBuyCity() {
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
-	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		SpawnCity(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
-	}
-}
-
-void ACatanPlayerController::clickBuyRoad() {
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
-	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		SpawnRoad(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
-	}
-}
-
-void ACatanPlayerController::clickPurchase() {
-	inputMode = EInputMode::InputMode_Purchase;
-	highlightTiles();
-}
-
-void ACatanPlayerController::clickRoll() {
-	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
-	RollServer(player_state);
-}
-
-void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * player_state) {
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-
-	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
-		gameMode->endTurn();
-		uint8 rollValue = FMath::RandRange(1, 6) + FMath::RandRange(1, 6);
-		gameState->giveOutResources(rollValue);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::FromInt(rollValue));
-	}
-}
-
-bool ACatanPlayerController::RollServer_Validate(ACatanPlayerState * player_state) {
-	return true;
-}
-
-
-
-
-
-
-void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {
-	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
-	HUD->setHUDClass(newHUD);
-}
-
-bool ACatanPlayerController::setHUD_Validate(TSubclassOf<class UCatanWidget> newHUD) {
-	return true;
-}
-
-void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
-
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-
-	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
-	if (selectedTile != nullptr) {
-		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
-		if (player_state != nullptr && player_state->getNumSettlementsLeft() > 0 &&
-			gameMode->isValidSettlementPlacement(row, col, vertex,player_state->getPlayerNum()) && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
-			
-			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
-			FActorSpawnParameters spawnInfo;
-			FRotator rotation(0.0f, 0.0f, 0.0f);
-
-			ASettlement * settlement = GetWorld()->SpawnActor<ASettlement>(location, rotation, spawnInfo);
-			settlement->setOwnerNum(player_state->getPlayerNum());
-
-			player_state->addSettlement(settlement);
-			player_state->payForPurchase(EPurchaseType::Purchase_Settlement);
-
-			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
-			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
-			for (int i = 0; i < connectedTiles.Num(); i++) {
-				player_state->addPerRoll(connectedTiles[i]->getRollVal(),connectedTiles[i]->getTileType());
-			}
-
-			//if we are in the intial placing phases of the game we need special HUD cycles
-			if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1 || gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
-				UClass* placementRoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementRoadUI.PlacementRoadUI_C"));
-				setHUD(placementRoadUI);
-			}
-
-			selectedTile->addPlaceableOnVertex(vertex, settlement);
-		}
-	}
-}
-
-bool ACatanPlayerController::SpawnSettlement_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
-	return true;
-}
-
-
-void ACatanPlayerController::SpawnCity_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
-
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
-
-	if (selectedTile != nullptr) {
-		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
-		ASettlement * settlement = dynamic_cast<ASettlement *>(selectedTile->getPlaceableOnVertex(vertex));
-		if (gameState != nullptr && player_state != nullptr && player_state->getNumCitiesLeft() > 0 && settlement != nullptr
-			  && settlement->getOwnerNum() == player_state->getPlayerNum() && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_City)) {
-
-			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
-			FActorSpawnParameters spawnInfo;
-			FRotator rotation(0.0f, 0.0f, 0.0f);
-
-			ACity * city = GetWorld()->SpawnActor<ACity>(location, rotation, spawnInfo);
-			city->setOwnerNum(player_state->getPlayerNum());
-
-			settlement->Destroy();
-
-			player_state->addCity(city);
-			player_state->payForPurchase(EPurchaseType::Purchase_City);
-
-			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
-			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
-			for (int i = 0; i < connectedTiles.Num(); i++) {
-				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType());
-			}
-
-			selectedTile->addPlaceableOnVertex(vertex, city);
-		}
-	}
-}
-
-bool ACatanPlayerController::SpawnCity_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
-	return true;
-}
-
-
-
-void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
-
-	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
-	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
-	if (selectedTile != nullptr) {
-		ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
-		if (player_state != nullptr && player_state->getNumRoadsLeft() > 0 &&
-			gameMode->isValidRoadPlacement(row, col, vertex, player_state->getPlayerNum()) && 
-			gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Road)) {
-
-			FVector location = getPlacementLocation(vertex, selectedTile->GetActorLocation());
-			FActorSpawnParameters spawnInfo;
-			FRotator rotation(0.0f, 0.0f, 0.0f);
-
-			ARoad * road = GetWorld()->SpawnActor<ARoad>(location, rotation, spawnInfo);
-			road->setOwnerNum(player_state->getPlayerNum());
-
-			lastPlacedRoad = road;
-			RotateRoadServer(row,col,vertex);
-
-			player_state->addRoad(road);
-			player_state->payForPurchase(EPurchaseType::Purchase_Road);
-
-			//if we are in the intial placing phases of the game we need special HUD cycles
-			if (gameMode->getGamePhase() == EGamePhase::GamePhase_Placement1 || gameMode->getGamePhase() == EGamePhase::GamePhase_Placement2) {
-				UClass* RoadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/PlacementConfirmRoadUI.PlacementConfirmRoadUI_C"));
-				setHUD(RoadUI);
-			}
-			else {
-				UClass* roadUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RoadUI.RoadUI_C"));
-				setHUD(roadUI);
-			}
-
-		}
-	}
-}
-
-bool ACatanPlayerController::SpawnRoad_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
-	return true;
-}
-
 FVector ACatanPlayerController::getPlacementLocation(EVertex vertex, FVector tileLocation) {
 	//TODO: remove constants
 		FVector location = tileLocation;
@@ -476,10 +483,4 @@ FVector ACatanPlayerController::getPlacementLocation(EVertex vertex, FVector til
 
 		location.Z = location.Z + 1.0f;
 		return location;
-}
-
-
-void swapHUD() {
-
-
 }
