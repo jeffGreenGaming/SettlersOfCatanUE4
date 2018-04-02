@@ -49,6 +49,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickConfirmRoadPlacement();
 
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickMoveRobber();
+
 
 	UFUNCTION(Client, Reliable, WithValidation, BlueprintCallable, Category = "HUDFunctions")
 	void setHUD(TSubclassOf<class UCatanWidget> newHUD);

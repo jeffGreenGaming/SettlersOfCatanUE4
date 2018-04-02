@@ -86,6 +86,9 @@ void ACatanPlayerController::clickConfirmRoadPlacement() {
 	ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
 }
 
+void ACatanPlayerController::clickMoveRobber() {
+
+}
 
 void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {
 	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
@@ -354,6 +357,10 @@ void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * playe
 		ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 		gameMode->endTurn();
 		uint8 rollValue = FMath::RandRange(1, 6) + FMath::RandRange(1, 6);
+		if (rollValue == 7) {
+			UClass* robberUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RobberUI.RobberUI_C"));
+			setHUD(robberUI);
+		}
 		gameState->giveOutResources(rollValue);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::FromInt(rollValue));
 	}

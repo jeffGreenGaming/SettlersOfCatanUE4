@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Catan.h"
-#include "HelperFunctions.h"
 #include "PlaceableArea.h"
 #include "CatanPlayerState.h"
 #include "CatanGameState.h"
@@ -72,7 +71,7 @@ void ACatanGameState::setDevelopmentCards(TArray<EDevCardType> cards) {
 }
 
 
-void ACatanGameState::setRobber(AStaticMeshActor* newRobber) {
+void ACatanGameState::setRobber(ARobber* newRobber) {
 	Robber = newRobber;
 }
 

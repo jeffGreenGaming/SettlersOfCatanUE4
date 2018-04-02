@@ -2,6 +2,7 @@
 #include "Catan.h"
 #include "PlaceableArea.h"
 #include "Enums/DevCardType.h"
+#include "Robber.h"
 #include "CatanGameMode.h"
 
 // numBrick, numStone, numWood, numSheep, numWheat
@@ -90,14 +91,7 @@ void  ACatanGameMode::StartPlay() {
 			}
 			else {
 				FActorSpawnParameters SpawnInfo;
-				AStaticMeshActor * Robber = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), tile->GetActorLocation() + FVector(0.0f, 0.0f, 0.5f), FRotator(0.0f, 0.0f, 0.0f), SpawnInfo);
-				Robber->SetReplicates(true);
-				UStaticMesh * newMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/Content/Meshes/robber.robber'")));
-				UStaticMeshComponent * mesh = Robber->GetStaticMeshComponent();
-				mesh->SetMobility(EComponentMobility::Movable);
-				mesh->SetStaticMesh(newMesh);
-				mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-				mesh->SetStaticMesh(newMesh);
+				ARobber * Robber = GetWorld()->SpawnActor<ARobber>(ARobber::StaticClass(), tile->GetActorLocation() + FVector(0.0f, 0.0f, 0.5f), FRotator(0.0f, 0.0f, 0.0f), SpawnInfo);
 				gameState->setRobber(Robber);
 			}
 		}

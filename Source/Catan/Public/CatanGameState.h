@@ -9,6 +9,7 @@
 #include "Enums/PurchaseType.h"
 #include "Enums/DevCardType.h"
 #include "DevelopmentCard.h"
+#include "Robber.h"
 #include "CatanGameState.generated.h"
 
 
@@ -42,7 +43,7 @@ public:
 
 	void setDevelopmentCards(TArray<EDevCardType> cards);
 
-	void setRobber(AStaticMeshActor* newRobber);
+	void setRobber(ARobber* newRobber);
 
 	// hands next deve card back and removes it from deck
 	EDevCardType getNextDevCard();
@@ -50,7 +51,7 @@ public:
 private:
 
 	UPROPERTY(replicated)
-	AStaticMeshActor* Robber;
+	ARobber* Robber;
 
 	TArray<ATile *> tiles;
 
