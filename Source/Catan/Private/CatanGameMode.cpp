@@ -48,13 +48,13 @@ void  ACatanGameMode::StartPlay() {
 
 	// use these so replicated properties only updated once -- represents the future tile types
 	EResourceType swapTileTypes[19] = {
-										EResourceType::ResourceType_Brick,EResourceType::ResourceType_Brick,EResourceType::ResourceType_Brick,
-										EResourceType::ResourceType_Stone,EResourceType::ResourceType_Stone,EResourceType::ResourceType_Stone,
-										EResourceType::ResourceType_Wood,EResourceType::ResourceType_Wood,EResourceType::ResourceType_Wood,EResourceType::ResourceType_Wood,
-										EResourceType::ResourceType_Sheep,EResourceType::ResourceType_Sheep,EResourceType::ResourceType_Sheep,EResourceType::ResourceType_Sheep,
-										EResourceType::ResourceType_Wheat,EResourceType::ResourceType_Wheat,EResourceType::ResourceType_Wheat,EResourceType::ResourceType_Wheat,
-										EResourceType::ResourceType_Desert
-										};
+		EResourceType::ResourceType_Brick,EResourceType::ResourceType_Brick,EResourceType::ResourceType_Brick,
+		EResourceType::ResourceType_Stone,EResourceType::ResourceType_Stone,EResourceType::ResourceType_Stone,
+		EResourceType::ResourceType_Wood,EResourceType::ResourceType_Wood,EResourceType::ResourceType_Wood,EResourceType::ResourceType_Wood,
+		EResourceType::ResourceType_Sheep,EResourceType::ResourceType_Sheep,EResourceType::ResourceType_Sheep,EResourceType::ResourceType_Sheep,
+		EResourceType::ResourceType_Wheat,EResourceType::ResourceType_Wheat,EResourceType::ResourceType_Wheat,EResourceType::ResourceType_Wheat,
+		EResourceType::ResourceType_Desert
+	};
 
 	for (int i = 0; i < 100; i++) {
 
