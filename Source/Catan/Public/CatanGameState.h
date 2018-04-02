@@ -44,6 +44,9 @@ public:
 
 	void setRobber(AStaticMeshActor* newRobber);
 
+	// hands next deve card back and removes it from deck
+	EDevCardType getNextDevCard();
+
 private:
 
 	UPROPERTY(replicated)

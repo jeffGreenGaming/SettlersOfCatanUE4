@@ -6,6 +6,11 @@
 #include "CatanGameState.h"
 #include "CatanGameMode.h"
 #include "PlaceableArea.h"
+#include "DevCards/KnightCard.h"
+#include "DevCards/MonopolyCard.h"
+#include "DevCards/RoadBuildingCard.h"
+#include "DevCards/YearOfPlentyCard.h"
+#include "DevCards/VictoryPointCard.h"
 #include "CatanPlayerController.h"
 
 
@@ -42,22 +47,69 @@ bool ACatanPlayerController::EndTurnServer_Validate() {
 	return true;
 }
 
-void ACatanPlayerController::clickConfirmRoadPlacement() {
-	if (Role == ROLE_Authority) {
-		ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
+void ACatanPlayerController::BuyDevCardServer_Implementation(ACatanPlayerState * player_state) {
+
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	if (player_state != nullptr && gameState != nullptr && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
+
+
+
+		EDevCardType cardType = gameState->getNextDevCard();
+		SpawnDevCardClient(cardType);
+		player_state->payForPurchase(EPurchaseType::Purchase_DevelopmentCard);
+
 	}
-	else {
-		ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
+
+}
+
+void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType cardType) {
+
+	FVector location(-110.0f, -6.0f, 90.5f);
+	FActorSpawnParameters spawnInfo;
+	FRotator rotation(0.0f, 180.0f, 0.0f);
+
+	ADevelopmentCard * developmentCard;
+	switch (cardType) {
+	case EDevCardType::DevCardType_Knight:
+		developmentCard = GetWorld()->SpawnActor<AKnightCard>(location, rotation, spawnInfo);
+		break;
+	case EDevCardType::DevCardType_Monopoly:
+		developmentCard = GetWorld()->SpawnActor<AMonopolyCard>(location, rotation, spawnInfo);
+		break;
+	case EDevCardType::DevCardType_YearOfPlenty:
+		developmentCard = GetWorld()->SpawnActor<AYearOfPlentyCard>(location, rotation, spawnInfo);
+		break;
+	case EDevCardType::DevCardType_RoadBuilding:
+		developmentCard = GetWorld()->SpawnActor<ARoadBuildingCard>(location, rotation, spawnInfo);
+		break;
+	case EDevCardType::DevCardType_VictoryPoints:
+		developmentCard = GetWorld()->SpawnActor<AVictoryPointCard>(location, rotation, spawnInfo);
+		break;
+
 	}
 }
 
+bool ACatanPlayerController::SpawnDevCardClient_Validate(EDevCardType cardType) {
+	return true;
+}
+
+bool ACatanPlayerController::BuyDevCardServer_Validate(ACatanPlayerState * player_state) {
+	return true;
+
+}
+
+
+void ACatanPlayerController::clickConfirmRoadPlacement() {
+		ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
+}
+
+void ACatanPlayerController::clickBuyDevCard() {
+	BuyDevCardServer(dynamic_cast<ACatanPlayerState *>(PlayerState));
+}
+
 void ACatanPlayerController::RotateRoad() {
-	if (Role == ROLE_Authority) {
-		RotateRoadServer(selectionRow, selectionCol, selectedVertex);
-	}
-	else {
-		RotateRoadServer(selectionRow, selectionCol, selectedVertex);
-	}
+	RotateRoadServer(selectionRow, selectionCol, selectedVertex);
 }
 
 

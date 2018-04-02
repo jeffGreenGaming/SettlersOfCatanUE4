@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickConfirmRoadPlacement();
 
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickBuyDevCard();
+
 	UFUNCTION(Client, Reliable, WithValidation, BlueprintCallable, Category = "HUDFunctions")
 	void setHUD(TSubclassOf<class UCatanWidget> newHUD);
 
@@ -54,8 +57,17 @@ public:
 
 	void RotateRoad();
 
+
+
 	UFUNCTION(BlueprintCallable, Category = "GameModeFunctions", Reliable, Server, WithValidation)
 	void EndTurnServer();
+
+
+	UFUNCTION(Reliable, Server, WithValidation)
+	void BuyDevCardServer(ACatanPlayerState * player_state);
+
+	UFUNCTION(Reliable, Client, WithValidation)
+	void SpawnDevCardClient(EDevCardType cardType);
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void ConfirmRoadServer(uint8 row, uint8 col, EVertex vertex);

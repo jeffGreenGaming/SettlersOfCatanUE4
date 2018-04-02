@@ -75,3 +75,12 @@ void ACatanGameState::setDevelopmentCards(TArray<EDevCardType> cards) {
 void ACatanGameState::setRobber(AStaticMeshActor* newRobber) {
 	Robber = newRobber;
 }
+
+EDevCardType ACatanGameState::getNextDevCard() {
+	EDevCardType returnType;
+	if (developmentCards.Num() > 0) {
+		returnType = developmentCards[0];
+		developmentCards.RemoveAt(0);
+	}
+	return returnType;
+}
