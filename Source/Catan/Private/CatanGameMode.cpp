@@ -201,7 +201,19 @@ EGamePhase ACatanGameMode::getGamePhase() {
 
 void ACatanGameMode::moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex) {
 	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	TArray<APlayerState* > players = gameState->PlayerArray;
 	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
 	gameState->moveRobberLocation(selectedTile->GetActorLocation() + FVector(0.0f,0.0f,0.5f));
+	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
 
+		if (ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i])) {
+			FResources playerResources = playerState->getResources();
+			ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(playerState->GetOwner());
+			if (controller != nullptr && playerResources.getTotalNumResources() > 7) {
+				UClass* throwAwayUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/ThrowAwayResourcesUI.ThrowAwayResourcesUI_C"));
+				controller->setHUD(throwAwayUI);
+			}
+		}
+
+	}
 }

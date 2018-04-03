@@ -44,6 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
 	FResources getResources();
 
+	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
+	void takeResources(FResources resourcesToTake);
+
 	void payForPurchase(EPurchaseType type);
 
 

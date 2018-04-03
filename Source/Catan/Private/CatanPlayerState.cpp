@@ -121,6 +121,15 @@ void ACatanPlayerState::addPerRoll(uint8 rollNumber, EResourceType resourceType)
 	}
 }
 
+
+void ACatanPlayerState::takeResources(FResources resourcesToTake) {
+	resources.numBrick -= resourcesToTake.numBrick;
+	resources.numSheep -= resourcesToTake.numSheep;
+	resources.numStone -= resourcesToTake.numStone;
+	resources.numWood -= resourcesToTake.numWood;
+	resources.numWheat -= resourcesToTake.numWheat;
+}
+
 void ACatanPlayerState::giveResources(uint8 rollNumber) {
 	resources.numBrick += perRollIncreases[rollNumber].numBrick;
 	resources.numSheep += perRollIncreases[rollNumber].numSheep;
