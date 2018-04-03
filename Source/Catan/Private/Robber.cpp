@@ -14,6 +14,7 @@ ARobber::ARobber()
 	Mesh->SetStaticMesh(MeshRef.Object);
 	bReplicates = true;
 	bReplicateMovement = true;
+	currentTile = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -28,5 +29,13 @@ void ARobber::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+}
+
+void ARobber::setCurrentTile(ATile * tile) {
+	currentTile = tile;
+}
+
+ATile * ARobber::getCurrentTile() {
+	return currentTile;
 }
 

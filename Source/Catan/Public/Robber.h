@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Tile.h"
 #include "Robber.generated.h"
 
 UCLASS()
@@ -25,6 +26,12 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	void setCurrentTile(ATile * tile);
+
+	ATile * getCurrentTile();
+
+private:
+	ATile * currentTile;
 	
 	
 };

@@ -48,7 +48,7 @@ public:
 	// hands next deve card back and removes it from deck
 	EDevCardType getNextDevCard();
 
-	void moveRobberLocation(FVector location);
+	void moveRobberLocation(ATile * tile);
 
 private:
 

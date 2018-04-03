@@ -92,6 +92,7 @@ void  ACatanGameMode::StartPlay() {
 			else {
 				FActorSpawnParameters SpawnInfo;
 				ARobber * Robber = GetWorld()->SpawnActor<ARobber>(ARobber::StaticClass(), tile->GetActorLocation() + FVector(0.0f, 0.0f, 0.5f), FRotator(0.0f, 0.0f, 0.0f), SpawnInfo);
+				Robber->setCurrentTile(tile);
 				gameState->setRobber(Robber);
 			}
 		}
@@ -203,9 +204,8 @@ void ACatanGameMode::moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex 
 	ACatanGameState * gameState = (ACatanGameState *)GameState;
 	TArray<APlayerState* > players = gameState->PlayerArray;
 	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
-	gameState->moveRobberLocation(selectedTile->GetActorLocation() + FVector(0.0f,0.0f,0.5f));
+	gameState->moveRobberLocation(selectedTile);
 	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
-
 		if (ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i])) {
 			FResources playerResources = playerState->getResources();
 			ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(playerState->GetOwner());
@@ -214,6 +214,5 @@ void ACatanGameMode::moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex 
 				controller->setHUD(throwAwayUI);
 			}
 		}
-
 	}
 }
