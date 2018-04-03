@@ -54,7 +54,7 @@ public:
 
 	uint8 getPlayerNum();
 
-	void addPerRoll(uint8 rollNumber, EResourceType resourceType);
+	void addPerRoll(uint8 rollNumber, EResourceType resourceType, int amount);
 
 	void giveResources(uint8 rollNumber);
 

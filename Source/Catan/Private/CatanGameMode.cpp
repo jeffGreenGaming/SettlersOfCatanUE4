@@ -204,7 +204,42 @@ void ACatanGameMode::moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex 
 	ACatanGameState * gameState = (ACatanGameState *)GameState;
 	TArray<APlayerState* > players = gameState->PlayerArray;
 	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
+
+	ATile * currentRobberTile = gameState->getRobberTile();
+	int numVertices = 6;
+
 	gameState->moveRobberLocation(selectedTile);
+	
+	//give back per rolls of tile robber is leaving
+	for (int i = 0; i < numVertices; i++) {
+		APlaceable * placeable = currentRobberTile->getPlaceableOnVertex(EVertex(i));
+		if (dynamic_cast<ASettlement*>(placeable)) {
+			uint8 playerNum = placeable->getOwnerNum();
+			ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[playerNum - 1]);
+			playerState->addPerRoll(currentRobberTile->getRollVal(), currentRobberTile->getTileType(), 1);
+		}
+		else if (dynamic_cast<ACity*>(placeable)) {
+			uint8 playerNum = placeable->getOwnerNum();
+			ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[playerNum - 1]);
+			playerState->addPerRoll(currentRobberTile->getRollVal(), currentRobberTile->getTileType(), 2);
+		}
+	}
+
+	//take away per rolls of tile robber is going to 
+	for (int i = 0; i < numVertices; i++) {
+		APlaceable * placeable = selectedTile->getPlaceableOnVertex(EVertex(i));
+		if (dynamic_cast<ASettlement*>(placeable)) {
+			uint8 playerNum = placeable->getOwnerNum();
+			ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[playerNum - 1]);
+			playerState->addPerRoll(selectedTile->getRollVal(), selectedTile->getTileType(), -1);
+		}
+		else if (dynamic_cast<ACity*>(placeable)) {
+			uint8 playerNum = placeable->getOwnerNum();
+			ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[playerNum - 1]);
+			playerState->addPerRoll(selectedTile->getRollVal(), selectedTile->getTileType(), -2);
+		}
+	}
+
 	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
 		if (ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i])) {
 			FResources playerResources = playerState->getResources();

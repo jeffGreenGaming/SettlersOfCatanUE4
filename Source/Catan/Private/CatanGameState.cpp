@@ -88,3 +88,7 @@ void ACatanGameState::moveRobberLocation(ATile * tile) {
 	Robber->SetActorLocation(tile->GetActorLocation() + FVector(0.0f, 0.0f, 0.5f));
 	Robber->setCurrentTile(tile);
 }
+
+ATile* ACatanGameState::getRobberTile() {
+	return Robber->getCurrentTile();
+}

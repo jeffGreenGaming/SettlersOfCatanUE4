@@ -249,7 +249,7 @@ void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col
 			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
 			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
 			for (int i = 0; i < connectedTiles.Num(); i++) {
-				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType());
+				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType(),1);
 			}
 
 			//if we are in the intial placing phases of the game we need special HUD cycles
@@ -294,7 +294,7 @@ void ACatanPlayerController::SpawnCity_Implementation(uint8 row, uint8 col, EVer
 			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
 			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
 			for (int i = 0; i < connectedTiles.Num(); i++) {
-				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType());
+				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType(),1);
 			}
 
 			selectedTile->addPlaceableOnVertex(vertex, city);

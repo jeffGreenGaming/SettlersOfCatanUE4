@@ -50,6 +50,8 @@ public:
 
 	void moveRobberLocation(ATile * tile);
 
+	ATile* getRobberTile();
+
 private:
 
 	UPROPERTY(replicated)

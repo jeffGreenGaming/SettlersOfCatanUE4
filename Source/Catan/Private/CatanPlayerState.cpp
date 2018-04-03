@@ -101,22 +101,22 @@ uint8 ACatanPlayerState::getPlayerNum() {
 	return playerNum;
 }
 
-void ACatanPlayerState::addPerRoll(uint8 rollNumber, EResourceType resourceType) {
+void ACatanPlayerState::addPerRoll(uint8 rollNumber, EResourceType resourceType, int amount) {
 	switch(resourceType) {
 		case EResourceType::ResourceType_Brick:
-			perRollIncreases[rollNumber].numBrick++;
+			perRollIncreases[rollNumber].numBrick += amount;
 			break;
 		case EResourceType::ResourceType_Wheat:
-			perRollIncreases[rollNumber].numWheat++;
+			perRollIncreases[rollNumber].numWheat += amount;
 			break;
 		case EResourceType::ResourceType_Stone:
-			perRollIncreases[rollNumber].numStone++;
+			perRollIncreases[rollNumber].numStone += amount;
 			break;
 		case EResourceType::ResourceType_Wood:
-			perRollIncreases[rollNumber].numWood++;
+			perRollIncreases[rollNumber].numWood += amount;
 			break;
 		case EResourceType::ResourceType_Sheep:
-			perRollIncreases[rollNumber].numSheep++;
+			perRollIncreases[rollNumber].numSheep += amount;
 			break;
 	}
 }
