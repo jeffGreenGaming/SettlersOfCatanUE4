@@ -53,6 +53,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickMoveRobber(bool bUsedKnight);
 
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickMonopolyResource(EResourceType resourceType);
+
 
 	UFUNCTION(Client, Reliable, WithValidation, BlueprintCallable, Category = "HUDFunctions")
 	void setHUD(TSubclassOf<class UCatanWidget> newHUD);
@@ -62,6 +65,11 @@ public:
 
 	UFUNCTION(Reliable, Client, WithValidation)
 	void SpawnDevCardClient(EDevCardType cardType);
+
+	//function called when monopoly is used to give all resources of type to a player
+	UFUNCTION(Reliable, Server, WithValidation)
+	void giveAllResourcesServer(ACatanPlayerState * player_state, EResourceType resourceType);
+
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void BuyDevCardServer(ACatanPlayerState * player_state);

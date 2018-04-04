@@ -257,3 +257,42 @@ void ACatanGameMode::makeClientsRemoveCards() {
 		}
 	}
 }
+
+void ACatanGameMode::useMonopoly(ACatanPlayerState * playerToGive, EResourceType resourceType) {
+
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	TArray<APlayerState* > players = gameState->PlayerArray;
+	FResources resourcesToGive = { 0,0,0,0,0 };
+
+	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
+		if (ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i])) {
+			FResources resourcesToTake = { 0,0,0,0,0 };
+			FResources playerResources = playerState->getResources();
+			switch (resourceType) {
+				case EResourceType::ResourceType_Brick:
+					resourcesToTake.numBrick += playerResources.numBrick;
+					resourcesToGive.numBrick += playerResources.numBrick;
+					break;
+				case EResourceType::ResourceType_Wood:
+					resourcesToTake.numWood += playerResources.numWood;
+					resourcesToGive.numWood += playerResources.numWood;
+					break;
+				case EResourceType::ResourceType_Stone:
+					resourcesToTake.numStone += playerResources.numStone;
+					resourcesToGive.numStone += playerResources.numStone;
+					break;
+				case EResourceType::ResourceType_Sheep:
+					resourcesToTake.numSheep += playerResources.numSheep;
+					resourcesToGive.numSheep += playerResources.numSheep;
+					break;
+				case EResourceType::ResourceType_Wheat:
+					resourcesToTake.numWheat += playerResources.numWheat;
+					resourcesToGive.numWheat += playerResources.numWheat;
+					break;
+			}
+			playerState->takeResources(resourcesToTake);
+		}
+	}
+
+	playerToGive->giveResources(resourcesToGive);
+}

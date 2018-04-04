@@ -10,6 +10,7 @@
 #include "CatanDefaultCharacter.h"
 #include "CatanPlayerState.h"
 #include "Enums/GamePhase.h"
+#include "Enums/ResourceType.h"
 #include "CatanGameMode.generated.h"
 
 /**
@@ -51,6 +52,8 @@ public:
 	void moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex);
 
 	void makeClientsRemoveCards();
+
+	void useMonopoly(ACatanPlayerState * playerToGive, EResourceType resourceType);
 
 private:
 	EGamePhase gamePhase;

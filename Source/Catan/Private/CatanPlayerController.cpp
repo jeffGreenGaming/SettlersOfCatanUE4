@@ -90,6 +90,11 @@ void ACatanPlayerController::clickMoveRobber(bool bUsedKnight) {
 	MoveRobberServer(selectionRow, selectionCol, selectedVertex, bUsedKnight);
 }
 
+void ACatanPlayerController::clickMonopolyResource(EResourceType resourceType) {
+	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
+	giveAllResourcesServer(player_state, resourceType);
+}
+
 void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {
 	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
 	HUD->setHUDClass(newHUD);
@@ -140,6 +145,16 @@ void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType card
 }
 
 bool ACatanPlayerController::SpawnDevCardClient_Validate(EDevCardType cardType) {
+	return true;
+}
+
+
+void ACatanPlayerController::giveAllResourcesServer_Implementation(ACatanPlayerState * player_state, EResourceType resourceType) {
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->useMonopoly(player_state, resourceType);
+}
+
+bool ACatanPlayerController::giveAllResourcesServer_Validate(ACatanPlayerState * player_state, EResourceType resourceType) {
 	return true;
 }
 
