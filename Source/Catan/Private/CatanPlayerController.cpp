@@ -86,8 +86,8 @@ void ACatanPlayerController::clickConfirmRoadPlacement() {
 	ConfirmRoadServer(selectionRow, selectionCol, selectedVertex);
 }
 
-void ACatanPlayerController::clickMoveRobber() {
-	MoveRobberServer(selectionRow, selectionCol, selectedVertex);
+void ACatanPlayerController::clickMoveRobber(bool bUsedKnight) {
+	MoveRobberServer(selectionRow, selectionCol, selectedVertex, bUsedKnight);
 }
 
 void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {
@@ -115,7 +115,7 @@ void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType card
 	FActorSpawnParameters spawnInfo;
 	FRotator rotation(0.0f, 180.0f, 0.0f);
 
-	ADevelopmentCard * developmentCard;
+	ADevelopmentCard * developmentCard = nullptr;
 	switch (cardType) {
 	case EDevCardType::DevCardType_Knight:
 		developmentCard = GetWorld()->SpawnActor<AKnightCard>(location, rotation, spawnInfo);
@@ -133,6 +133,9 @@ void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType card
 		developmentCard = GetWorld()->SpawnActor<AVictoryPointCard>(location, rotation, spawnInfo);
 		break;
 
+	}
+	if (developmentCard != nullptr) {
+		developmentCard->SetOwner(this);
 	}
 }
 
@@ -360,7 +363,7 @@ void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * playe
 			UClass* robberUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RobberUI.RobberUI_C"));
 			setHUD(robberUI);
 		}
-		gameState->giveOutResources(rollValue);
+		gameState->giveOutResourcesOnRollValue(rollValue);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::FromInt(rollValue));
 	}
 }
@@ -369,12 +372,15 @@ bool ACatanPlayerController::RollServer_Validate(ACatanPlayerState * player_stat
 	return true;
 }
 
-void ACatanPlayerController::MoveRobberServer_Implementation(uint8 row, uint8 col, EVertex vertex) {
+void ACatanPlayerController::MoveRobberServer_Implementation(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
 	ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 	gameMode->moveRobber(row, col, vertex);
+	if (!bUsedKnight) {
+		gameMode->makeClientsRemoveCards();
+	}
 }
 
-bool ACatanPlayerController::MoveRobberServer_Validate(uint8 row, uint8 col, EVertex vertex) {
+bool ACatanPlayerController::MoveRobberServer_Validate(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
 	return true;
 }
 

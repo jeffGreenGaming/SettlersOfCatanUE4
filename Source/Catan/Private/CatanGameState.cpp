@@ -37,7 +37,7 @@ ATile * ACatanGameState::getTileFromCoordinates(uint32 row, uint32 col) {
 
 
 
-void ACatanGameState::giveOutResources(uint8 rollNumber) {
+void ACatanGameState::giveOutResourcesOnRollValue(uint8 rollNumber) {
 	for (int i = 0; i < PlayerArray.Num(); i++) {
 		ACatanPlayerState * player_state = dynamic_cast<ACatanPlayerState *>(PlayerArray[i]);
 		player_state->giveResources(rollNumber);

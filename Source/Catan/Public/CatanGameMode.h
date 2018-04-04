@@ -50,6 +50,8 @@ public:
 
 	void moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex selectionVertex);
 
+	void makeClientsRemoveCards();
+
 private:
 	EGamePhase gamePhase;
 

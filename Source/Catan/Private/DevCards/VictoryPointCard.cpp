@@ -8,3 +8,4 @@ AVictoryPointCard::AVictoryPointCard() {
 	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/VictoryPointCard.VictoryPointCard"));
 	Mesh->SetStaticMesh(MeshRef.Object);
 }
+

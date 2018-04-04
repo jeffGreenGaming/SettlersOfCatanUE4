@@ -9,4 +9,9 @@
 AMonopolyCard::AMonopolyCard() {
 	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/MonopolyCard.MonopolyCard"));
 	Mesh->SetStaticMesh(MeshRef.Object);
+	Mesh->OnClicked.AddDynamic(this, &AMonopolyCard::use);
+}
+
+void AMonopolyCard::use(UPrimitiveComponent* pComponent) {
+	Super::use(pComponent);
 }

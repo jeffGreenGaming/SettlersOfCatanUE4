@@ -7,5 +7,9 @@
 ARoadBuildingCard::ARoadBuildingCard() {
 	ConstructorHelpers::FObjectFinder< UStaticMesh> MeshRef(TEXT("/Game/Content/Meshes/RoadBuildingCard.RoadBuildingCard"));
 	Mesh->SetStaticMesh(MeshRef.Object);
+	Mesh->OnClicked.AddDynamic(this, &ARoadBuildingCard::use);
 }
 
+void ARoadBuildingCard::use(UPrimitiveComponent* pComponent) {
+	Super::use(pComponent);
+}

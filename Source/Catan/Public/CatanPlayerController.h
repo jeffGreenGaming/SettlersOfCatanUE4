@@ -9,6 +9,7 @@
 #include "Road.h"
 #include "CatanWidget.h"
 #include "Enums/InputMode.h"
+#include "Enums/DevCardType.h"
 #include "Enums/TileEdge.h"
 #include "CatanPlayerController.generated.h"
 
@@ -50,7 +51,7 @@ public:
 	void clickConfirmRoadPlacement();
 
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
-	void clickMoveRobber();
+	void clickMoveRobber(bool bUsedKnight);
 
 
 	UFUNCTION(Client, Reliable, WithValidation, BlueprintCallable, Category = "HUDFunctions")
@@ -84,7 +85,7 @@ public:
 	void RollServer(ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void MoveRobberServer(uint8 row, uint8 col, EVertex vertex);
+	void MoveRobberServer(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight);
 
 	void UpdateSelection();
 

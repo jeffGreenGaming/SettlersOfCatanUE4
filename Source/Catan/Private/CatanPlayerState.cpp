@@ -122,12 +122,28 @@ void ACatanPlayerState::addPerRoll(uint8 rollNumber, EResourceType resourceType,
 }
 
 
-void ACatanPlayerState::takeResources(FResources resourcesToTake) {
+void ACatanPlayerState::takeResources_Implementation(FResources resourcesToTake) {
 	resources.numBrick -= resourcesToTake.numBrick;
 	resources.numSheep -= resourcesToTake.numSheep;
 	resources.numStone -= resourcesToTake.numStone;
 	resources.numWood -= resourcesToTake.numWood;
 	resources.numWheat -= resourcesToTake.numWheat;
+}
+
+bool ACatanPlayerState::takeResources_Validate(FResources resourcesToTake) {
+	return true;
+}
+
+void ACatanPlayerState::giveResources_Implementation(FResources resourcesToGive) {
+	resources.numBrick += resourcesToGive.numBrick;
+	resources.numSheep += resourcesToGive.numSheep;
+	resources.numStone += resourcesToGive.numStone;
+	resources.numWood += resourcesToGive.numWood;
+	resources.numWheat += resourcesToGive.numWheat;
+}
+
+bool ACatanPlayerState::giveResources_Validate(FResources resourcesToGive) {
+	return true;
 }
 
 void ACatanPlayerState::giveResources(uint8 rollNumber) {

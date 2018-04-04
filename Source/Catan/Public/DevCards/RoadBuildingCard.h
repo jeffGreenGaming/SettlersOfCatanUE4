@@ -16,5 +16,7 @@ class CATAN_API ARoadBuildingCard : public ADevelopmentCard
 public:
 	ARoadBuildingCard();
 	
+	UFUNCTION()
+	virtual void use(UPrimitiveComponent* pComponent) override;
 	
 };

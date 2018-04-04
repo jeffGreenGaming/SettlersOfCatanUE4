@@ -15,5 +15,5 @@ class CATAN_API AVictoryPointCard : public ADevelopmentCard
 	
 public:
 	AVictoryPointCard();
-	
+
 };

@@ -240,6 +240,12 @@ void ACatanGameMode::moveRobber(uint8 selectionRow, uint8 selectionCol, EVertex 
 		}
 	}
 
+
+}
+
+void ACatanGameMode::makeClientsRemoveCards() {
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	TArray<APlayerState* > players = gameState->PlayerArray;
 	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
 		if (ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i])) {
 			FResources playerResources = playerState->getResources();

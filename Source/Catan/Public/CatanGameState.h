@@ -33,7 +33,7 @@ public:
 
 	ATile * getTileFromCoordinates(uint32 row, uint32 col);
 
-	void giveOutResources(uint8 rollNumber);
+	void giveOutResourcesOnRollValue(uint8 rollNumber);
 
 	bool isMyTurn(uint8 playerNum);
 

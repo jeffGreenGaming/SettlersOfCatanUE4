@@ -44,11 +44,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
 	FResources getResources();
 
-	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CatanPlayerStateFunctions")
 	void takeResources(FResources resourcesToTake);
 
-	void payForPurchase(EPurchaseType type);
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CatanPlayerStateFunctions")
+	void giveResources(FResources resourcesToGive);
 
+	void payForPurchase(EPurchaseType type);
 
 	void setPlayerNum(uint8 num);
 

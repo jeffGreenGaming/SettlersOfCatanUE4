@@ -10,6 +10,7 @@ ADevelopmentCard::ADevelopmentCard()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject < UStaticMeshComponent>(TEXT("CardMesh"));
+	Mesh->OnBeginCursorOver.AddDynamic(this, &ADevelopmentCard::highlight);
 }
 
 // Called when the game starts or when spawned
@@ -26,3 +27,10 @@ void ADevelopmentCard::Tick( float DeltaTime )
 
 }
 
+void ADevelopmentCard::use(UPrimitiveComponent* pComponent) {
+	this->Destroy();
+}
+
+void ADevelopmentCard::highlight(UPrimitiveComponent* pComponent) {
+	Mesh->SetRenderCustomDepth(true);
+}

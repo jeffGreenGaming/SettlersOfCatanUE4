@@ -16,5 +16,7 @@ class CATAN_API AKnightCard : public ADevelopmentCard
 public:
 	AKnightCard();
 	
+	UFUNCTION()
+	virtual void use(UPrimitiveComponent* pComponent) override;
 	
 };

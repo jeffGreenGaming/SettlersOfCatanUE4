@@ -15,6 +15,8 @@ class CATAN_API AMonopolyCard : public ADevelopmentCard
 	
 public:
 	AMonopolyCard();
-	
+
+	UFUNCTION()
+	virtual void use(UPrimitiveComponent* pComponent) override;
 	
 };

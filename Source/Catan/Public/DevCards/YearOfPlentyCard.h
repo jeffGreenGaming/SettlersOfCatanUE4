@@ -17,5 +17,7 @@ public:
 
 	AYearOfPlentyCard();
 	
+	UFUNCTION()
+	virtual void use(UPrimitiveComponent* pComponent) override;
 	
 };
