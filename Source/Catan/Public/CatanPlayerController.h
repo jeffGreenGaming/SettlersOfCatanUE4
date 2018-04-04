@@ -39,7 +39,7 @@ public:
 	void clickBuyCity();
 
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
-	void clickBuyRoad();
+	void clickBuyRoad(bool bRoadBuilding);
 
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickBuyDevCard();
@@ -48,7 +48,7 @@ public:
 	void clickRoll();
 
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
-	void clickConfirmRoadPlacement();
+	void clickConfirmRoadPlacement(bool bRoadBuilding);
 
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickMoveRobber(bool bUsedKnight);
@@ -75,7 +75,7 @@ public:
 	void BuyDevCardServer(ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void ConfirmRoadServer(uint8 row, uint8 col, EVertex vertex);
+	void ConfirmRoadServer(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding);
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void RotateRoadServer(uint8 row, uint8 col, EVertex vertex);
@@ -87,7 +87,7 @@ public:
 	void SpawnCity(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void SpawnRoad(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state);
+	void SpawnRoad(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding);
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void RollServer(ACatanPlayerState * player_state);

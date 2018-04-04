@@ -15,7 +15,7 @@ AMonopolyCard::AMonopolyCard() {
 
 void AMonopolyCard::use(UPrimitiveComponent* pComponent) {
 	ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(GetOwner());
-	UClass* knightUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/MonopolyUI.MonopolyUI_C"));
-	controller->setHUD(knightUI);
+	UClass* monopolyUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/MonopolyUI.MonopolyUI_C"));
+	controller->setHUD(monopolyUI);
 	Super::use(pComponent);
 }

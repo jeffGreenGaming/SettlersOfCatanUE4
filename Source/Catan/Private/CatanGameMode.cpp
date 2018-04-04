@@ -34,17 +34,17 @@ void  ACatanGameMode::StartPlay() {
 
 	TArray<EDevCardType> devCardTypes;
 	for (int i = 0; i < 14; i++) {
-		devCardTypes.Add(EDevCardType::DevCardType_Knight);
+		//devCardTypes.Add(EDevCardType::DevCardType_Knight);
 	}
 
 	for (int i = 0; i < 5; i++) {
-		devCardTypes.Add(EDevCardType::DevCardType_VictoryPoints);
+		//devCardTypes.Add(EDevCardType::DevCardType_VictoryPoints);
 	}
 
 	for (int i = 0; i < 2; i++) {
-		devCardTypes.Add(EDevCardType::DevCardType_YearOfPlenty);
+		//devCardTypes.Add(EDevCardType::DevCardType_YearOfPlenty);
 		devCardTypes.Add(EDevCardType::DevCardType_RoadBuilding);
-		devCardTypes.Add(EDevCardType::DevCardType_Monopoly);
+		//devCardTypes.Add(EDevCardType::DevCardType_Monopoly);
 	}
 
 	// use these so replicated properties only updated once -- represents the future tile types

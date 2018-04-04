@@ -30,5 +30,8 @@ public:
 	UFUNCTION()
 	void highlight(UPrimitiveComponent* pComponent);
 
+	UFUNCTION()
+	void unhighlight(UPrimitiveComponent* pComponent);
+
 	
 };

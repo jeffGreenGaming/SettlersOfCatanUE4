@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Catan.h"
+#include "CatanPlayerController.h"
 #include "RoadBuildingCard.h"
 
 
@@ -11,5 +12,8 @@ ARoadBuildingCard::ARoadBuildingCard() {
 }
 
 void ARoadBuildingCard::use(UPrimitiveComponent* pComponent) {
+	ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(GetOwner());
+	UClass* roadBuildingUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RoadBuildingUI.RoadBuildingUI_C"));
+	controller->setHUD(roadBuildingUI);
 	Super::use(pComponent);
 }

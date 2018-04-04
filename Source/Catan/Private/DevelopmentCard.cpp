@@ -11,6 +11,7 @@ ADevelopmentCard::ADevelopmentCard()
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject < UStaticMeshComponent>(TEXT("CardMesh"));
 	Mesh->OnBeginCursorOver.AddDynamic(this, &ADevelopmentCard::highlight);
+	Mesh->OnEndCursorOver.AddDynamic(this, &ADevelopmentCard::unhighlight);
 }
 
 // Called when the game starts or when spawned
@@ -33,4 +34,8 @@ void ADevelopmentCard::use(UPrimitiveComponent* pComponent) {
 
 void ADevelopmentCard::highlight(UPrimitiveComponent* pComponent) {
 	Mesh->SetRenderCustomDepth(true);
+}
+
+void ADevelopmentCard::unhighlight(UPrimitiveComponent* pComponent) {
+	Mesh->SetRenderCustomDepth(false);
 }
