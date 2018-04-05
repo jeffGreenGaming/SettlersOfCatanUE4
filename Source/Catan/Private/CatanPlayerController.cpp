@@ -38,6 +38,13 @@ void ACatanPlayerController::SetupInputComponent() {
 
 }
 
+void ACatanPlayerController::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ACatanPlayerController, lastPlacedRoad);
+
+}
+
 void ACatanPlayerController::clickPurchase() {
 	inputMode = EInputMode::InputMode_Purchase;
 	highlightTiles();
@@ -93,6 +100,10 @@ void ACatanPlayerController::clickMoveRobber(bool bUsedKnight) {
 void ACatanPlayerController::clickMonopolyResource(EResourceType resourceType) {
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
 	giveAllResourcesServer(player_state, resourceType);
+}
+
+bool ACatanPlayerController::isLastPlacedRoadNull() {
+	return lastPlacedRoad == nullptr;
 }
 
 void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidget> newHUD) {

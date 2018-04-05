@@ -56,6 +56,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickMonopolyResource(EResourceType resourceType);
 
+	// used to check if we actually placed a road last turn or not
+	UFUNCTION(BlueprintCallable, Category = "RoadPlacementFunctions")
+	bool isLastPlacedRoadNull();
 
 	UFUNCTION(Client, Reliable, WithValidation, BlueprintCallable, Category = "HUDFunctions")
 	void setHUD(TSubclassOf<class UCatanWidget> newHUD);
@@ -99,6 +102,8 @@ public:
 
 	void RotateRoad();
 
+
+
 private:
 
 	TSubclassOf<class UCatanWidget> changeHUD;
@@ -117,6 +122,7 @@ private:
 	EVertex selectedVertex;
 
 	// used for rotating road after placement
+	UPROPERTY(replicated)
 	ARoad * lastPlacedRoad;
 
 	//index of last referenced placeablearea -- used to rotate road around
