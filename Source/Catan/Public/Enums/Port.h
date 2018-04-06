@@ -4,7 +4,7 @@
 
 #include "Port.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class EPort : uint8
 {
 	Port_Brick,
@@ -12,5 +12,6 @@ enum class EPort : uint8
 	Port_Stone,
 	Port_Wheat,
 	Port_Wood,
-	Port_Any
+	Port_Any3,
+	Port_Any4
 };

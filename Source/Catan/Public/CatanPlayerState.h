@@ -10,6 +10,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Enums/PurchaseType.h"
 #include "Enums/Resources.h"
+#include "Enums/Port.h"
 #include "CatanPlayerState.generated.h"
 
 /**
@@ -26,6 +27,9 @@ class CATAN_API ACatanPlayerState : public APlayerState
 	
 
 public:
+
+	UPROPERTY(BlueprintReadOnly)
+	TArray<EPort> ports;
 
 	ACatanPlayerState();
 
@@ -84,5 +88,6 @@ private:
 
 	UPROPERTY(replicated)
 	uint8 playerNum;
+
 	
 };

@@ -16,6 +16,7 @@ ACatanPlayerState::ACatanPlayerState() : numSettlementsLeft(5), numCitiesLeft(4)
 	for (int i = 0; i <= numPossibleRolls; i++) {
 		perRollIncreases.Add({ 0,0,0,0,0 });
 	}
+	ports.Add(EPort::Port_Any4);
 }
 
 void ACatanPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
@@ -154,4 +155,3 @@ void ACatanPlayerState::giveResources(uint8 rollNumber) {
 	resources.numWheat += perRollIncreases[rollNumber].numWheat;
 
 }
-

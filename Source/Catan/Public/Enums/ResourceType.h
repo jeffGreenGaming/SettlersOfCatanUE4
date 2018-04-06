@@ -8,7 +8,7 @@
  * 
  */
 
-UENUM()
+UENUM(BlueprintType)
 enum class EResourceType : uint8
 {
 	ResourceType_Stone,
