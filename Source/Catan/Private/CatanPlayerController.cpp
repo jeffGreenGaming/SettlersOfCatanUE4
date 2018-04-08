@@ -100,6 +100,14 @@ void ACatanPlayerController::clickMoveRobber(bool bUsedKnight) {
 void ACatanPlayerController::clickMonopolyResource(EResourceType resourceType) {
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
 	giveAllResourcesServer(player_state, resourceType);
+}	
+
+void ACatanPlayerController::clickUsePort(EPort portType, EResourceType resourceToTake, EResourceType resourceToGive) {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanPlayerState * playerState = (ACatanPlayerState *)PlayerState;
+	if (gameState->isMyTurn(playerState->getPlayerNum())) {
+		usePortServer(playerState, portType, resourceToTake, resourceToGive);
+	}
 }
 
 bool ACatanPlayerController::isLastPlacedRoadNull() {
@@ -127,7 +135,7 @@ bool ACatanPlayerController::EndTurnServer_Validate() {
 
 void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType cardType) {
 
-	FVector location(-110.0f, -6.0f, 90.5f);
+	FVector location(-95.0f, -6.0f, 90.5f);
 	FActorSpawnParameters spawnInfo;
 	FRotator rotation(0.0f, 180.0f, 0.0f);
 
@@ -166,6 +174,15 @@ void ACatanPlayerController::giveAllResourcesServer_Implementation(ACatanPlayerS
 }
 
 bool ACatanPlayerController::giveAllResourcesServer_Validate(ACatanPlayerState * player_state, EResourceType resourceType) {
+	return true;
+}
+
+void ACatanPlayerController::usePortServer_Implementation(ACatanPlayerState * player_state, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive) {
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->usePort(player_state,portType,resourceToTake,resourceToGive);
+}
+
+bool ACatanPlayerController::usePortServer_Validate(ACatanPlayerState * player_state, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive) {
 	return true;
 }
 
@@ -277,10 +294,16 @@ void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col
 			player_state->addSettlement(settlement);
 			player_state->payForPurchase(EPurchaseType::Purchase_Settlement);
 
+			// add resources on the roll value
 			APlaceableArea * currentPlacementArea = selectedTile->getPlaceableAreaAtVertex(vertex);
 			TArray<ATile *> connectedTiles = currentPlacementArea->getConnectedTiles();
 			for (int i = 0; i < connectedTiles.Num(); i++) {
 				player_state->addPerRoll(connectedTiles[i]->getRollVal(), connectedTiles[i]->getTileType(),1);
+			}
+
+			//add port
+			if (selectedTile->hasPortOnVertex(selectedVertex)) {
+				player_state->addPort(selectedTile->getPortOnVertex(selectedVertex));
 			}
 
 			//if we are in the intial placing phases of the game we need special HUD cycles

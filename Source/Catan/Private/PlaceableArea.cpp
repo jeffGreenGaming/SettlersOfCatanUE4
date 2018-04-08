@@ -73,3 +73,11 @@ TArray<ATile *> APlaceableArea::getConnectedTiles() {
 	return connectedTiles;
 
 }
+
+bool APlaceableArea::hasPort() {
+	return portExists;
+}
+
+EPort APlaceableArea::getPort() {
+	return port;
+}

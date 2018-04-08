@@ -38,7 +38,7 @@ void  ACatanGameMode::StartPlay() {
 	}
 
 	for (int i = 0; i < 5; i++) {
-		devCardTypes.Add(EDevCardType::DevCardType_VictoryPoints);
+		//devCardTypes.Add(EDevCardType::DevCardType_VictoryPoints);
 	}
 
 	for (int i = 0; i < 2; i++) {
@@ -295,4 +295,57 @@ void ACatanGameMode::useMonopoly(ACatanPlayerState * playerToGive, EResourceType
 	}
 
 	playerToGive->giveResources(resourcesToGive);
+}
+
+void ACatanGameMode::usePort(ACatanPlayerState * playerUsing, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive) {
+	uint8 amountToTake = 2; //default to one of the five 2 for ports
+
+	if (portType == EPort::Port_Any3) {
+		amountToTake = 3;
+	}
+	else if (portType == EPort::Port_Any4) {
+		amountToTake = 4;
+	}
+
+	FResources resourcesToGive = { 0,0,0,0,0 };
+	FResources resourcesToTake = { 0,0,0,0,0 };
+	switch (resourceToGive) {
+		case EResourceType::ResourceType_Brick:
+			resourcesToGive.numBrick++;
+			break;
+		case EResourceType::ResourceType_Stone:
+			resourcesToGive.numStone++;
+			break;
+		case EResourceType::ResourceType_Wood:
+			resourcesToGive.numWood++;
+			break;
+		case EResourceType::ResourceType_Wheat:
+			resourcesToGive.numWheat++;
+			break;
+		case EResourceType::ResourceType_Sheep:
+			resourcesToGive.numSheep++;
+			break;
+	}
+
+	switch (resourceToTake) {
+		case EResourceType::ResourceType_Brick:
+			resourcesToTake.numBrick = amountToTake;
+			break;
+		case EResourceType::ResourceType_Stone:
+			resourcesToTake.numStone = amountToTake;
+			break;
+		case EResourceType::ResourceType_Wood:
+			resourcesToTake.numWood = amountToTake;
+			break;
+		case EResourceType::ResourceType_Wheat:
+			resourcesToTake.numWheat = amountToTake;
+			break;
+		case EResourceType::ResourceType_Sheep:
+			resourcesToTake.numSheep = amountToTake;
+			break;
+	}
+
+	playerUsing->giveResources(resourcesToGive);
+	playerUsing->takeResources(resourcesToTake);
+
 }

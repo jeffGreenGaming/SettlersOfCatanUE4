@@ -14,19 +14,6 @@
 class ATile;
 class APlaceableArea;
 
-
-USTRUCT(BlueprintType)
-struct FPort{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere)
-	EPort port;
-
-	UPROPERTY(EditAnywhere)
-	EVertex vertex;
-
-};
-
 UCLASS()
 class CATAN_API ATile : public AActor
 {
@@ -57,15 +44,15 @@ public:
 
 	void setGridPosition(uint16 row, uint16 col);
 
-	void setPorts(TArray<FPort> newPorts);
-
-	TArray<FPort> getPorts();
-
 	void highlightTile(bool toggle);
 
 	ATile* getEdgeTile(ETileEdge edge);
 
 	APlaceable * getPlaceableOnVertex(EVertex vertex);
+
+	bool hasPortOnVertex(EVertex vertex);
+
+	EPort getPortOnVertex(EVertex vertex);
 
 	void addPlaceableOnVertex(EVertex vertex, APlaceable * newStructure);
 
@@ -106,9 +93,6 @@ private:
 
 	UPROPERTY(ReplicatedUsing = OnRep_rollValue)
 	uint8 rollValue;
-
-	UPROPERTY(EditAnywhere)
-	TArray<FPort> ports;
 
 	UPROPERTY(replicated)
 	AStaticMeshActor* Token;

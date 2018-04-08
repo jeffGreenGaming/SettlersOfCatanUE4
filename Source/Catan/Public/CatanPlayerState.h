@@ -58,11 +58,16 @@ public:
 
 	void setPlayerNum(uint8 num);
 
+	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
 	uint8 getPlayerNum();
 
 	void addPerRoll(uint8 rollNumber, EResourceType resourceType, int amount);
 
 	void giveResources(uint8 rollNumber);
+
+	//only the client cares about what ports we have
+	UFUNCTION(Client, Reliable, WithValidation)
+	void addPort(EPort newPort);
 
 private:
 

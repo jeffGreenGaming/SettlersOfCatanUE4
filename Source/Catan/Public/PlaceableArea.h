@@ -34,8 +34,10 @@ public:
 
 	void setTaken(APlaceable * takenBy);
 
+	// has connection to specific placeable area
 	bool hasRoadConnection(APlaceableArea * connection);
 
+	// has a connection for that specific player
 	bool hasRoadConnection(uint8 playerNum);
 
 	void addRoadConnection(APlaceableArea * connection, ARoad* road);
@@ -46,14 +48,16 @@ public:
 
 	TArray<ATile *> getConnectedTiles();
 
+	bool hasPort();
+
+	EPort getPort();
+
 private:
 
 
 	APlaceable * takenStructure;
 
-
 	TArray<ARoad *> roads;
-
 
 	TArray<APlaceableArea *> roadConnections;
 
@@ -62,5 +66,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TArray<ATile *> connectedTiles;
+
+	UPROPERTY(EditAnywhere)
+	bool portExists;
+
+	UPROPERTY(EditAnywhere)
+	EPort port;
 
 };

@@ -39,6 +39,7 @@ public:
 
 	void setPlayerTurn(uint8 playerNum);
 
+	UFUNCTION(BlueprintCallable, Category = "CatanGameStateFunctions")
 	uint8 getPlayerTurn();
 
 	void setDevelopmentCards(TArray<EDevCardType> cards);

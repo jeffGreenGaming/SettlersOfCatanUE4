@@ -33,6 +33,14 @@ APlaceable * ATile::getPlaceableOnVertex(EVertex vertex) {
 	return vertices[uint8(vertex)]->getTakenStructure();
 }
 
+bool ATile::hasPortOnVertex(EVertex vertex) {
+	return vertices[uint8(vertex)]->hasPort();
+}
+
+EPort ATile::getPortOnVertex(EVertex vertex) {
+	return vertices[uint8(vertex)]->getPort();
+}
+
 void ATile::addPlaceableOnVertex(EVertex vertex, APlaceable * newStructure) {
 	vertices[uint8(vertex)]->setTaken(newStructure);
 }
@@ -110,14 +118,6 @@ void ATile::setGridPosition(uint16 row, uint16 col) {
 	rowPos = row;
 	colPos = col;
 	
-}
-
-void ATile::setPorts(TArray<FPort> newPorts) {
-	ports = newPorts;
-}
-
-TArray<FPort> ATile::getPorts() {
-	return ports;
 }
 
 void ATile::highlightTile(bool toggle) {

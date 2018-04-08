@@ -55,6 +55,8 @@ public:
 
 	void useMonopoly(ACatanPlayerState * playerToGive, EResourceType resourceType);
 
+	void usePort(ACatanPlayerState * playerUsing, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
+
 private:
 	EGamePhase gamePhase;
 

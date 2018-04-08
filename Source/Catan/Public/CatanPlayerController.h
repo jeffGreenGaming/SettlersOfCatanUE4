@@ -56,6 +56,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickMonopolyResource(EResourceType resourceType);
 
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickUsePort(EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
+
 	// used to check if we actually placed a road last turn or not
 	UFUNCTION(BlueprintCallable, Category = "RoadPlacementFunctions")
 	bool isLastPlacedRoadNull();
@@ -73,6 +76,8 @@ public:
 	UFUNCTION(Reliable, Server, WithValidation)
 	void giveAllResourcesServer(ACatanPlayerState * player_state, EResourceType resourceType);
 
+	UFUNCTION(Reliable, Server, WithValidation)
+	void usePortServer(ACatanPlayerState * player_state, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void BuyDevCardServer(ACatanPlayerState * player_state);

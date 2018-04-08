@@ -155,3 +155,18 @@ void ACatanPlayerState::giveResources(uint8 rollNumber) {
 	resources.numWheat += perRollIncreases[rollNumber].numWheat;
 
 }
+
+void ACatanPlayerState::addPort_Implementation(EPort newPort) {
+	//dont want to have two of the same port in the array
+	for (int i = 0; i < ports.Num(); i++) {
+		if (ports[i] == newPort) {
+			return;
+		}
+	}
+	ports.Add(newPort);
+}
+
+
+bool ACatanPlayerState::addPort_Validate(EPort newPort) {
+	return true;
+}
