@@ -39,6 +39,7 @@ ACatanPlayerController::ACatanPlayerController() {
 void ACatanPlayerController::BeginPlay() {
 	Super::BeginPlay();
 
+	//start up the particle system for the vertex beam
 	vertexBeam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), vertexBeam->Template, FVector(-40.0f, -6.0f, 400.0f), FRotator(90.0f, 0.0f, 0.0f), false);
 	vertexBeam->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
 
