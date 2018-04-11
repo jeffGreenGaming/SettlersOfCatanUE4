@@ -67,10 +67,10 @@ public:
 	void setHUD(TSubclassOf<class UCatanWidget> newHUD);
 
 	UFUNCTION(BlueprintCallable, Category = "GameModeFunctions", Reliable, Server, WithValidation)
-	void EndTurnServer();
+	void endTurnServer();
 
 	UFUNCTION(Reliable, Client, WithValidation)
-	void SpawnDevCardClient(EDevCardType cardType);
+	void spawnDevCardClient(EDevCardType cardType);
 
 	//function called when monopoly is used to give all resources of type to a player
 	UFUNCTION(Reliable, Server, WithValidation)
@@ -80,34 +80,32 @@ public:
 	void usePortServer(ACatanPlayerState * player_state, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void BuyDevCardServer(ACatanPlayerState * player_state);
+	void buyDevCardServer(ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void ConfirmRoadServer(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding);
+	void confirmRoadServer(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void RotateRoadServer(uint8 row, uint8 col, EVertex vertex);
+	void rotateRoadServer(uint8 row, uint8 col, EVertex vertex);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void SpawnSettlement(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state);
+	void buySettlementServer(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void SpawnCity(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state);
+	void buyCityServer(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void SpawnRoad(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding);
+	void buyRoadServer(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void RollServer(ACatanPlayerState * player_state);
+	void rollServer(ACatanPlayerState * player_state);
 
 	UFUNCTION(Reliable, Server, WithValidation)
-	void MoveRobberServer(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight);
+	void moveRobberServer(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight);
 
-	void UpdateSelection();
+	void updateSelection();
 
-	void RotateRoad();
-
-
+	void rotateRoad();
 
 private:
 

@@ -33,8 +33,8 @@ ACatanPlayerController::ACatanPlayerController() {
 
 void ACatanPlayerController::SetupInputComponent() {
 	Super::SetupInputComponent();
-	InputComponent->BindAction("LeftClick", IE_Pressed, this, &ACatanPlayerController::UpdateSelection);
-	InputComponent->BindAction("RotateRoad", IE_Pressed, this, &ACatanPlayerController::RotateRoad);
+	InputComponent->BindAction("LeftClick", IE_Pressed, this, &ACatanPlayerController::updateSelection);
+	InputComponent->BindAction("RotateRoad", IE_Pressed, this, &ACatanPlayerController::rotateRoad);
 
 }
 
@@ -54,7 +54,7 @@ void ACatanPlayerController::clickBuySettlement() {
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		SpawnSettlement(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
+		buySettlementServer(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
 	}
 }
 
@@ -62,7 +62,7 @@ void ACatanPlayerController::clickBuyCity() {
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		SpawnCity(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
+		buyCityServer(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState));
 	}
 }
 
@@ -70,7 +70,7 @@ void ACatanPlayerController::clickBuyRoad(bool bRoadBuilding) {
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		SpawnRoad(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState), bRoadBuilding);
+		buyRoadServer(selectionRow, selectionCol, selectedVertex, dynamic_cast<ACatanPlayerState *>(PlayerState), bRoadBuilding);
 	}
 }
 
@@ -79,22 +79,22 @@ void ACatanPlayerController::clickBuyDevCard() {
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		BuyDevCardServer(dynamic_cast<ACatanPlayerState *>(PlayerState));
+		buyDevCardServer(dynamic_cast<ACatanPlayerState *>(PlayerState));
 	}
 
 }
 
 void ACatanPlayerController::clickRoll() {
 	ACatanPlayerState * player_state = (ACatanPlayerState *)PlayerState;
-	RollServer(player_state);
+	rollServer(player_state);
 }
 
 void ACatanPlayerController::clickConfirmRoadPlacement(bool bRoadBuilding) {
-	ConfirmRoadServer(selectionRow, selectionCol, selectedVertex, bRoadBuilding);
+	confirmRoadServer(selectionRow, selectionCol, selectedVertex, bRoadBuilding);
 }
 
 void ACatanPlayerController::clickMoveRobber(bool bUsedKnight) {
-	MoveRobberServer(selectionRow, selectionCol, selectedVertex, bUsedKnight);
+	moveRobberServer(selectionRow, selectionCol, selectedVertex, bUsedKnight);
 }
 
 void ACatanPlayerController::clickMonopolyResource(EResourceType resourceType) {
@@ -123,17 +123,17 @@ bool ACatanPlayerController::setHUD_Validate(TSubclassOf<class UCatanWidget> new
 	return true;
 }
 
-void ACatanPlayerController::EndTurnServer_Implementation() {
+void ACatanPlayerController::endTurnServer_Implementation() {
 	ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 	gameMode->endTurn();
 }
 
-bool ACatanPlayerController::EndTurnServer_Validate() {
+bool ACatanPlayerController::endTurnServer_Validate() {
 	return true;
 }
 
 
-void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType cardType) {
+void ACatanPlayerController::spawnDevCardClient_Implementation(EDevCardType cardType) {
 
 	FVector location(-95.0f, -6.0f, 90.5f);
 	FActorSpawnParameters spawnInfo;
@@ -163,7 +163,7 @@ void ACatanPlayerController::SpawnDevCardClient_Implementation(EDevCardType card
 	}
 }
 
-bool ACatanPlayerController::SpawnDevCardClient_Validate(EDevCardType cardType) {
+bool ACatanPlayerController::spawnDevCardClient_Validate(EDevCardType cardType) {
 	return true;
 }
 
@@ -186,16 +186,14 @@ bool ACatanPlayerController::usePortServer_Validate(ACatanPlayerState * player_s
 	return true;
 }
 
-void ACatanPlayerController::BuyDevCardServer_Implementation(ACatanPlayerState * player_state) {
+void ACatanPlayerController::buyDevCardServer_Implementation(ACatanPlayerState * player_state) {
 
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 	if (player_state != nullptr && gameState != nullptr && gameMode->canAfford(player_state->getResources(), EPurchaseType::Purchase_Settlement)) {
 
-
-
 		EDevCardType cardType = gameState->getNextDevCard();
-		SpawnDevCardClient(cardType);
+		spawnDevCardClient(cardType);
 		player_state->payForPurchase(EPurchaseType::Purchase_DevelopmentCard);
 
 	}
@@ -203,13 +201,13 @@ void ACatanPlayerController::BuyDevCardServer_Implementation(ACatanPlayerState *
 }
 
 
-bool ACatanPlayerController::BuyDevCardServer_Validate(ACatanPlayerState * player_state) {
+bool ACatanPlayerController::buyDevCardServer_Validate(ACatanPlayerState * player_state) {
 	return true;
 
 }
 
 
-void ACatanPlayerController::ConfirmRoadServer_Implementation(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding) {
+void ACatanPlayerController::confirmRoadServer_Implementation(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding) {
 
 	if (lastPlacedRoad != nullptr) {
 		ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
@@ -238,12 +236,12 @@ void ACatanPlayerController::ConfirmRoadServer_Implementation(uint8 row, uint8 c
 	}
 }
 
-bool ACatanPlayerController::ConfirmRoadServer_Validate(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding) {
+bool ACatanPlayerController::confirmRoadServer_Validate(uint8 row, uint8 col, EVertex vertex, bool bRoadBuilding) {
 	return true;
 }
 
 
-void ACatanPlayerController::RotateRoadServer_Implementation(uint8 row, uint8 col, EVertex vertex) {
+void ACatanPlayerController::rotateRoadServer_Implementation(uint8 row, uint8 col, EVertex vertex) {
 
 	if (lastPlacedRoad != nullptr) {
 		ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
@@ -269,12 +267,12 @@ void ACatanPlayerController::RotateRoadServer_Implementation(uint8 row, uint8 co
 	}
 }
 
-bool ACatanPlayerController::RotateRoadServer_Validate(uint8 row, uint8 col, EVertex vertex) {
+bool ACatanPlayerController::rotateRoadServer_Validate(uint8 row, uint8 col, EVertex vertex) {
 	return true;
 }
 
 
-void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+void ACatanPlayerController::buySettlementServer_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
 
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 
@@ -317,12 +315,12 @@ void ACatanPlayerController::SpawnSettlement_Implementation(uint8 row, uint8 col
 	}
 }
 
-bool ACatanPlayerController::SpawnSettlement_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+bool ACatanPlayerController::buySettlementServer_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
 	return true;
 }
 
 
-void ACatanPlayerController::SpawnCity_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+void ACatanPlayerController::buyCityServer_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
 
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
@@ -356,13 +354,13 @@ void ACatanPlayerController::SpawnCity_Implementation(uint8 row, uint8 col, EVer
 	}
 }
 
-bool ACatanPlayerController::SpawnCity_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
+bool ACatanPlayerController::buyCityServer_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state) {
 	return true;
 }
 
 
 
-void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding) {
+void ACatanPlayerController::buyRoadServer_Implementation(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding) {
 
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 	ATile * selectedTile = gameState->getTileFromCoordinates(row, col);
@@ -380,7 +378,7 @@ void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVer
 			road->setOwnerNum(player_state->getPlayerNum());
 
 			lastPlacedRoad = road;
-			RotateRoadServer(row, col, vertex);
+			rotateRoadServer(row, col, vertex);
 
 			player_state->addRoad(road);
 			if (!bRoadBuilding) {
@@ -400,16 +398,16 @@ void ACatanPlayerController::SpawnRoad_Implementation(uint8 row, uint8 col, EVer
 	}
 }
 
-bool ACatanPlayerController::SpawnRoad_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding) {
+bool ACatanPlayerController::buyRoadServer_Validate(uint8 row, uint8 col, EVertex vertex, ACatanPlayerState * player_state, bool bRoadBuilding) {
 	return true;
 }
 
 
-void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * player_state) {
+void ACatanPlayerController::rollServer_Implementation(ACatanPlayerState * player_state) {
 	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
 
 	if (gameState->isMyTurn(player_state->getPlayerNum())) {
-		EndTurnServer();
+		endTurnServer();
 		uint8 rollValue = FMath::RandRange(1, 6) + FMath::RandRange(1, 6);
 		if (rollValue == 7) {
 			UClass* robberUI = LoadObject<UClass>(nullptr, TEXT("/Game/Content/Blueprints/UI/RobberUI.RobberUI_C"));
@@ -420,11 +418,11 @@ void ACatanPlayerController::RollServer_Implementation(ACatanPlayerState * playe
 	}
 }
 
-bool ACatanPlayerController::RollServer_Validate(ACatanPlayerState * player_state) {
+bool ACatanPlayerController::rollServer_Validate(ACatanPlayerState * player_state) {
 	return true;
 }
 
-void ACatanPlayerController::MoveRobberServer_Implementation(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
+void ACatanPlayerController::moveRobberServer_Implementation(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
 	ACatanGameMode * gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
 	gameMode->moveRobber(row, col, vertex);
 	if (!bUsedKnight) {
@@ -432,11 +430,11 @@ void ACatanPlayerController::MoveRobberServer_Implementation(uint8 row, uint8 co
 	}
 }
 
-bool ACatanPlayerController::MoveRobberServer_Validate(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
+bool ACatanPlayerController::moveRobberServer_Validate(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
 	return true;
 }
 
-void ACatanPlayerController::UpdateSelection() {
+void ACatanPlayerController::updateSelection() {
 
 	FHitResult hitResult;
 
@@ -461,8 +459,8 @@ void ACatanPlayerController::UpdateSelection() {
 
 }
 
-void ACatanPlayerController::RotateRoad() {
-	RotateRoadServer(selectionRow, selectionCol, selectedVertex);
+void ACatanPlayerController::rotateRoad() {
+	rotateRoadServer(selectionRow, selectionCol, selectedVertex);
 }
 
 
