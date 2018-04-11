@@ -11,6 +11,7 @@
 #include "Enums/InputMode.h"
 #include "Enums/DevCardType.h"
 #include "Enums/TileEdge.h"
+#include "ParticleDefinitions.h"
 #include "CatanPlayerController.generated.h"
 
 
@@ -25,7 +26,14 @@ class CATAN_API ACatanPlayerController : public APlayerController
 
 
 public:
+
+	//beam particle system to be shown on vertex selection
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Particles")
+	UParticleSystemComponent * vertexBeam;
+
 	ACatanPlayerController();
+
+	void BeginPlay() override;
 
 	void SetupInputComponent() override;
 

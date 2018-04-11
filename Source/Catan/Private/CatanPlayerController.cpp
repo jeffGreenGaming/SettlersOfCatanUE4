@@ -28,9 +28,21 @@ ACatanPlayerController::ACatanPlayerController() {
 	inputMode = EInputMode::InputMode_Main;
 	lastPlacedRoad = nullptr;
 	lastPlaceRoadConnectionIndex = 0;
+
+	vertexBeam = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Beam"));
+	ConstructorHelpers::FObjectFinder< UParticleSystem> particleRef(TEXT("/Game/Content/Particles/Beam.Beam"));
+	vertexBeam->SetTemplate(particleRef.Object);
+
 }
 
 
+void ACatanPlayerController::BeginPlay() {
+	Super::BeginPlay();
+
+	vertexBeam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), vertexBeam->Template, FVector(-40.0f, -6.0f, 400.0f), FRotator(90.0f, 0.0f, 0.0f), false);
+	vertexBeam->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
+
+}
 void ACatanPlayerController::SetupInputComponent() {
 	Super::SetupInputComponent();
 	InputComponent->BindAction("LeftClick", IE_Pressed, this, &ACatanPlayerController::updateSelection);
@@ -46,8 +58,7 @@ void ACatanPlayerController::GetLifetimeReplicatedProps(TArray< FLifetimePropert
 }
 
 void ACatanPlayerController::clickPurchase() {
-	inputMode = EInputMode::InputMode_Purchase;
-	highlightTiles();
+	// can possibly remove
 }
 
 void ACatanPlayerController::clickBuySettlement() {
@@ -446,6 +457,7 @@ void ACatanPlayerController::updateSelection() {
 		selectionCol = clickedTile->getColPos();
 		selectionRow = clickedTile->getRowPos();
 		selectedVertex = clickedTile->getClosestVertex(hitResult.ImpactPoint);
+		vertexBeam->SetWorldLocation(getPlacementLocation(selectedVertex, clickedTile->GetActorLocation()));
 	}
 
 	TArray<AActor*> Tiles;
@@ -455,6 +467,8 @@ void ACatanPlayerController::updateSelection() {
 		ATile * tile = dynamic_cast<ATile*>(Tiles[i]);
 		tile->highlightTile(false);
 	}
+
+
 	highlightTiles();
 
 }
