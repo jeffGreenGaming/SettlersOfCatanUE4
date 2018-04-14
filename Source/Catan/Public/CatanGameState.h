@@ -42,6 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CatanGameStateFunctions")
 	uint8 getPlayerTurn();
 
+	UFUNCTION(BlueprintCallable, Category = "CatanGameStateFunctions")
+	EResourceType getTradeResource();
+
+	void setTradeResource(EResourceType newType);
+
 	void setDevelopmentCards(TArray<EDevCardType> cards);
 
 	void setRobber(ARobber* newRobber);
@@ -64,6 +69,9 @@ private:
 	uint8 currentPlayerTurn;
 
 	TArray<EDevCardType> developmentCards;
+
+	UPROPERTY(replicated)
+	EResourceType currentTradeResource;
 	
 
 	

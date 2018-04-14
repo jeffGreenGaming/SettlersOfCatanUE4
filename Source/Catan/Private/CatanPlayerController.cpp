@@ -122,6 +122,18 @@ void ACatanPlayerController::clickUsePort(EPort portType, EResourceType resource
 	}
 }
 
+void ACatanPlayerController::clickIntiateTrade(EResourceType resourceWanted) {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ACatanPlayerState * playerState = (ACatanPlayerState *)PlayerState;
+	if (gameState->isMyTurn(playerState->getPlayerNum())) {
+		intiateTradeServer(playerState, resourceWanted);
+	}
+}
+
+void ACatanPlayerController::clickOfferTrade(FResources resourceOffered) {
+
+}
+
 bool ACatanPlayerController::isLastPlacedRoadNull() {
 	return lastPlacedRoad == nullptr;
 }
@@ -130,6 +142,7 @@ void ACatanPlayerController::setHUD_Implementation(TSubclassOf<class UCatanWidge
 	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
 	HUD->setHUDClass(newHUD);
 }
+
 
 bool ACatanPlayerController::setHUD_Validate(TSubclassOf<class UCatanWidget> newHUD) {
 	return true;
@@ -176,6 +189,25 @@ void ACatanPlayerController::spawnDevCardClient_Implementation(EDevCardType card
 }
 
 bool ACatanPlayerController::spawnDevCardClient_Validate(EDevCardType cardType) {
+	return true;
+}
+
+
+void ACatanPlayerController::spawnTradeOverlayClient_Implementation() {
+	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
+	HUD->spawnTradeOverlay();
+}
+
+bool ACatanPlayerController::spawnTradeOverlayClient_Validate() {
+	return true;
+}
+
+void ACatanPlayerController::removeTradeOverlayClient_Implementation() {
+	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
+	HUD->removeTradeOverlay();
+}
+
+bool ACatanPlayerController::removeTradeOverlayClient_Validate() {
 	return true;
 }
 
@@ -443,6 +475,15 @@ void ACatanPlayerController::moveRobberServer_Implementation(uint8 row, uint8 co
 }
 
 bool ACatanPlayerController::moveRobberServer_Validate(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight) {
+	return true;
+}
+
+void ACatanPlayerController::intiateTradeServer_Implementation(ACatanPlayerState * catanPlayerState, EResourceType resourceWanted) {
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->sendOutTradeRequests(catanPlayerState,resourceWanted);
+}
+
+bool ACatanPlayerController::intiateTradeServer_Validate(ACatanPlayerState * catanPlayerState, EResourceType resourceWanted) {
 	return true;
 }
 

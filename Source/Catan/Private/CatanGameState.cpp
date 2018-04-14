@@ -54,6 +54,7 @@ void ACatanGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ACatanGameState, currentPlayerTurn);
 	DOREPLIFETIME(ACatanGameState, Robber);
+	DOREPLIFETIME(ACatanGameState, currentTradeResource);
 	
 }
 
@@ -91,4 +92,12 @@ void ACatanGameState::moveRobberLocation(ATile * tile) {
 
 ATile* ACatanGameState::getRobberTile() {
 	return Robber->getCurrentTile();
+}
+
+void ACatanGameState::setTradeResource(EResourceType newType) {
+	currentTradeResource = newType;
+}
+
+EResourceType ACatanGameState::getTradeResource() {
+	return currentTradeResource;
 }

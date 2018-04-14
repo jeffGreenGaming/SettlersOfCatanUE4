@@ -57,6 +57,8 @@ public:
 
 	void usePort(ACatanPlayerState * playerUsing, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
 
+	void sendOutTradeRequests(ACatanPlayerState * playerSending, EResourceType resourceWanted);
+
 private:
 	EGamePhase gamePhase;
 

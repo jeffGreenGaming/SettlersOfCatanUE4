@@ -22,10 +22,21 @@ public:
 
 	void setHUDClass(TSubclassOf<class UCatanWidget> newHUD);
 
+	void spawnTradeOverlay();
+
+	void removeTradeOverlay();
+
 private:
 	/** Class of user widget, loaded from Content Browser */
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UCatanWidget> WidgetClass;
+
+	/** Class of user widget for the trade overlay -- so we can easily spawn and despawn */
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCatanWidget> TradeOverlayClass;
+
+	UPROPERTY(EditAnywhere)
+	class UCatanWidget * TradeOverlayWidget;
 
 	/* Reference to created user widget*/
 	UPROPERTY(EditAnywhere)

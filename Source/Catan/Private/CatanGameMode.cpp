@@ -192,6 +192,17 @@ void ACatanGameMode::endTurn() {
 		}
 		gameState->setPlayerTurn(currentPlayerTurn);
 
+		//remove all outstanding trade possibilities when the player chooses to end their turn
+		TArray<APlayerState* > players = gameState->PlayerArray;
+		for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
+			if (ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i])) {
+				if (ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(playerState->GetOwner())){
+					controller->removeTradeOverlayClient();
+				}
+			}
+			
+		}
+
 	}
 }
 
@@ -347,5 +358,23 @@ void ACatanGameMode::usePort(ACatanPlayerState * playerUsing, EPort portType, ER
 
 	playerUsing->giveResources(resourcesToGive);
 	playerUsing->takeResources(resourcesToTake);
+
+}
+
+void ACatanGameMode::sendOutTradeRequests(ACatanPlayerState * playerSending, EResourceType resourceWanted) {
+	
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	gameState->setTradeResource(resourceWanted);
+
+	TArray<APlayerState* > players = gameState->PlayerArray;
+
+	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
+		ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i]);
+		if (playerState->getPlayerNum() != playerSending->getPlayerNum()) {
+			if (ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(playerState->GetOwner())) {
+				controller->spawnTradeOverlayClient();
+			}
+		}
+	}
 
 }

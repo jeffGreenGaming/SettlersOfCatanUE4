@@ -67,6 +67,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickUsePort(EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
 
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickIntiateTrade(EResourceType resourceWanted);
+
+	//Function for sending the desired offer to the trading user
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickOfferTrade(FResources resourceOffered);
+
 	// used to check if we actually placed a road last turn or not
 	UFUNCTION(BlueprintCallable, Category = "RoadPlacementFunctions")
 	bool isLastPlacedRoadNull();
@@ -79,6 +86,12 @@ public:
 
 	UFUNCTION(Reliable, Client, WithValidation)
 	void spawnDevCardClient(EDevCardType cardType);
+
+	UFUNCTION(Reliable, Client, WithValidation)
+	void spawnTradeOverlayClient();
+
+	UFUNCTION(Reliable, Client, WithValidation)
+	void removeTradeOverlayClient();
 
 	//function called when monopoly is used to give all resources of type to a player
 	UFUNCTION(Reliable, Server, WithValidation)
@@ -111,9 +124,14 @@ public:
 	UFUNCTION(Reliable, Server, WithValidation)
 	void moveRobberServer(uint8 row, uint8 col, EVertex vertex, bool bUsedKnight);
 
+	UFUNCTION(Reliable, Server, WithValidation)
+	void intiateTradeServer(ACatanPlayerState * catanPlayerState, EResourceType resourceWanted);
+
 	void updateSelection();
 
 	void rotateRoad();
+
+
 
 private:
 
