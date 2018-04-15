@@ -87,11 +87,18 @@ public:
 	UFUNCTION(Reliable, Client, WithValidation)
 	void spawnDevCardClient(EDevCardType cardType);
 
+	//functions to spawn and remove the trading overlays from the HUDS
 	UFUNCTION(Reliable, Client, WithValidation)
 	void spawnTradeOverlayClient();
 
 	UFUNCTION(Reliable, Client, WithValidation)
 	void removeTradeOverlayClient();
+
+	UFUNCTION(Reliable, Client, WithValidation)
+	void spawnTradeOfferOverlayClient();
+
+	UFUNCTION(Reliable, Client, WithValidation)
+	void removeTradeOfferOverlayClient();
 
 	//function called when monopoly is used to give all resources of type to a player
 	UFUNCTION(Reliable, Server, WithValidation)
@@ -126,6 +133,9 @@ public:
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void intiateTradeServer(ACatanPlayerState * catanPlayerState, EResourceType resourceWanted);
+
+	UFUNCTION(Reliable, Server, WithValidation)
+	void sendOfferServer(ACatanPlayerState * catanPlayerState, FResources resourceToGive);
 
 	void updateSelection();
 

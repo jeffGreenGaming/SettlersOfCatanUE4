@@ -7,6 +7,7 @@ ACatanHUD::ACatanHUD() {
 
 	static ConstructorHelpers::FClassFinder<UCatanWidget> WidgetAsset(TEXT("/Game/Content/Blueprints/UI/PlacementSettlementUI"));
 	static ConstructorHelpers::FClassFinder<UCatanWidget> TradeOverlayAsset(TEXT("/Game/Content/Blueprints/UI/TradeOverlay"));
+	static ConstructorHelpers::FClassFinder<UCatanWidget> TradeOfferOverlayAsset(TEXT("/Game/Content/Blueprints/UI/TradeOfferOverlay"));
 
 	if (WidgetAsset.Succeeded())
 	{
@@ -16,6 +17,11 @@ ACatanHUD::ACatanHUD() {
 	if (TradeOverlayAsset.Succeeded())
 	{
 		TradeOverlayClass = TradeOverlayAsset.Class;
+	}
+
+	if (TradeOfferOverlayAsset.Succeeded())
+	{
+		TradeOfferOverlayClass = TradeOfferOverlayAsset.Class;
 	}
 
 }
@@ -62,6 +68,27 @@ void ACatanHUD::removeTradeOverlay() {
 
 	if (TradeOverlayWidget != nullptr) {
 		TradeOverlayWidget->RemoveFromParent();
+	}
+
+}
+
+
+void ACatanHUD::spawnTradeOfferOverlay() {
+
+	removeTradeOfferOverlay();
+
+	TradeOfferOverlayWidget = CreateWidget<UCatanWidget>(GetWorld(), TradeOfferOverlayClass);
+	if (TradeOfferOverlayWidget)
+	{
+		TradeOfferOverlayWidget->AddToViewport();
+	}
+
+}
+
+void ACatanHUD::removeTradeOfferOverlay() {
+
+	if (TradeOfferOverlayWidget != nullptr) {
+		TradeOfferOverlayWidget->RemoveFromParent();
 	}
 
 }

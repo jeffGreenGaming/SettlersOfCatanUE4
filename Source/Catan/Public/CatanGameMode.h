@@ -11,6 +11,7 @@
 #include "CatanPlayerState.h"
 #include "Enums/GamePhase.h"
 #include "Enums/ResourceType.h"
+#include "Enums/Resources.h"
 #include "CatanGameMode.generated.h"
 
 /**
@@ -58,6 +59,8 @@ public:
 	void usePort(ACatanPlayerState * playerUsing, EPort portType, EResourceType resourceToTake, EResourceType resourceToGive);
 
 	void sendOutTradeRequests(ACatanPlayerState * playerSending, EResourceType resourceWanted);
+
+	void sendOffer(ACatanPlayerState * playerSending, FResources resourceToTrade);
 
 private:
 	EGamePhase gamePhase;

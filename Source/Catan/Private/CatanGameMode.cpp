@@ -378,3 +378,24 @@ void ACatanGameMode::sendOutTradeRequests(ACatanPlayerState * playerSending, ERe
 	}
 
 }
+
+void ACatanGameMode::sendOffer(ACatanPlayerState * playerSending, FResources resourcesToTrade) {
+
+	FTradeOffer offer = FTradeOffer{ resourcesToTrade, playerSending->getPlayerNum() };
+
+	ACatanGameState * gameState = (ACatanGameState *)GameState;
+	
+
+	TArray<APlayerState* > players = gameState->PlayerArray;
+
+	for (int i = 0; i < gameState->PlayerArray.Num(); i++) {
+		ACatanPlayerState * playerState = dynamic_cast<ACatanPlayerState*>(players[i]);
+		if (playerState->getPlayerNum() == gameState->getPlayerTurn()) {
+			playerState->addTradeOfferClient(offer); 
+			if (ACatanPlayerController * controller = dynamic_cast<ACatanPlayerController*>(playerState->GetOwner())) {
+				controller->spawnTradeOfferOverlayClient();
+			}
+		}
+	}
+
+}

@@ -131,7 +131,8 @@ void ACatanPlayerController::clickIntiateTrade(EResourceType resourceWanted) {
 }
 
 void ACatanPlayerController::clickOfferTrade(FResources resourceOffered) {
-
+	ACatanPlayerState * playerState = (ACatanPlayerState *)PlayerState;
+	sendOfferServer(playerState, resourceOffered);
 }
 
 bool ACatanPlayerController::isLastPlacedRoadNull() {
@@ -208,6 +209,24 @@ void ACatanPlayerController::removeTradeOverlayClient_Implementation() {
 }
 
 bool ACatanPlayerController::removeTradeOverlayClient_Validate() {
+	return true;
+}
+
+void ACatanPlayerController::spawnTradeOfferOverlayClient_Implementation() {
+	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
+	HUD->spawnTradeOfferOverlay();
+}
+
+bool ACatanPlayerController::spawnTradeOfferOverlayClient_Validate() {
+	return true;
+}
+
+void ACatanPlayerController::removeTradeOfferOverlayClient_Implementation() {
+	ACatanHUD * HUD = dynamic_cast<ACatanHUD *>(GetHUD());
+	HUD->removeTradeOfferOverlay();
+}
+
+bool ACatanPlayerController::removeTradeOfferOverlayClient_Validate() {
 	return true;
 }
 
@@ -486,6 +505,16 @@ void ACatanPlayerController::intiateTradeServer_Implementation(ACatanPlayerState
 bool ACatanPlayerController::intiateTradeServer_Validate(ACatanPlayerState * catanPlayerState, EResourceType resourceWanted) {
 	return true;
 }
+
+void ACatanPlayerController::sendOfferServer_Implementation(ACatanPlayerState * catanPlayerState, FResources resourceToGive) {
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->sendOffer(catanPlayerState, resourceToGive);
+}
+
+bool ACatanPlayerController::sendOfferServer_Validate(ACatanPlayerState * catanPlayerState, FResources resourceToGive) {
+	return true;
+}
+
 
 void ACatanPlayerController::updateSelection() {
 

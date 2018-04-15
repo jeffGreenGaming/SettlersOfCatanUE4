@@ -156,6 +156,34 @@ void ACatanPlayerState::giveResources(uint8 rollNumber) {
 
 }
 
+void ACatanPlayerState::addTradeOfferClient_Implementation(FTradeOffer offer) {
+	currentTradeOffers.Add(offer);
+}
+
+
+bool ACatanPlayerState::addTradeOfferClient_Validate(FTradeOffer offer) {
+	return true;
+}
+
+void ACatanPlayerState::removeTradeOfferClient_Implementation(uint8 playerNum) {
+	for (int i = 0; i < currentTradeOffers.Num(); i++) {
+		if (playerNum == currentTradeOffers[i].playerNum) {
+			currentTradeOffers.RemoveAt(i);
+		}
+	}
+}
+
+bool ACatanPlayerState::removeTradeOfferClient_Validate(uint8 playerNum) {
+	return true;
+}
+
+FTradeOffer ACatanPlayerState::getNextTradeOffer() {
+	if (currentTradeOffers.Num() >= 0) {
+		return currentTradeOffers[0];
+	}
+	return FTradeOffer{ 0,0 };
+}
+
 void ACatanPlayerState::addPort_Implementation(EPort newPort) {
 	//dont want to have two of the same port in the array
 	for (int i = 0; i < ports.Num(); i++) {
@@ -170,3 +198,4 @@ void ACatanPlayerState::addPort_Implementation(EPort newPort) {
 bool ACatanPlayerState::addPort_Validate(EPort newPort) {
 	return true;
 }
+

@@ -19,6 +19,19 @@
 
 
 
+USTRUCT(BlueprintType)
+struct FTradeOffer {
+
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	FResources resourcesToTrade;
+
+	UPROPERTY(BlueprintReadOnly)
+	uint8 playerNum;
+
+
+};
 
 UCLASS()
 class CATAN_API ACatanPlayerState : public APlayerState
@@ -65,6 +78,15 @@ public:
 
 	void giveResources(uint8 rollNumber);
 
+	UFUNCTION(Client, Reliable, WithValidation)
+	void addTradeOfferClient(FTradeOffer offer);
+
+	UFUNCTION(Client, Reliable, WithValidation)
+	void removeTradeOfferClient(uint8 playerNum);
+
+	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
+	FTradeOffer getNextTradeOffer();
+
 	//only the client cares about what ports we have
 	UFUNCTION(Client, Reliable, WithValidation)
 	void addPort(EPort newPort);
@@ -93,6 +115,8 @@ private:
 
 	UPROPERTY(replicated)
 	uint8 playerNum;
+
+	TArray<FTradeOffer> currentTradeOffers;
 
 	
 };

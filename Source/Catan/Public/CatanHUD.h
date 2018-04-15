@@ -26,6 +26,10 @@ public:
 
 	void removeTradeOverlay();
 
+	void spawnTradeOfferOverlay();
+
+	void removeTradeOfferOverlay();
+
 private:
 	/** Class of user widget, loaded from Content Browser */
 	UPROPERTY(EditAnywhere)
@@ -37,6 +41,13 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class UCatanWidget * TradeOverlayWidget;
+
+	/** Class of user widget for the trade offer overlay -- so we can easily spawn and despawn */
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCatanWidget> TradeOfferOverlayClass;
+
+	UPROPERTY(EditAnywhere)
+	class UCatanWidget * TradeOfferOverlayWidget;
 
 	/* Reference to created user widget*/
 	UPROPERTY(EditAnywhere)
