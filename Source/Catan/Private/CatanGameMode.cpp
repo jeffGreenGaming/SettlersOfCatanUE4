@@ -403,38 +403,37 @@ void ACatanGameMode::acceptOffer(ACatanPlayerState * playerAccepting) {
 
 	ACatanGameState * gameState = (ACatanGameState *)GameState;
 
-	EResourceType resourceWanted = gameState->getTradeResource(); // the resource originally wanted by the trade intiater
-	FResources resourceToGive = { 0,0,0,0,0 }; //resource to give to player accepting trade
+	FResources resourcesWantedByCurrPlayer = { 0,0,0,0,0 }; //resource to give to player accepting trade
 	
-	switch (resourceWanted) {
+	switch (gameState->getTradeResource()) {
 		case EResourceType::ResourceType_Brick:
-			resourceToGive.numBrick = 1;
+			resourcesWantedByCurrPlayer.numBrick = 1;
 			break;
 		case EResourceType::ResourceType_Stone:
-			resourceToGive.numStone = 1;
+			resourcesWantedByCurrPlayer.numStone = 1;
 			break;
 		case EResourceType::ResourceType_Wood:
-			resourceToGive.numWood = 1;
+			resourcesWantedByCurrPlayer.numWood = 1;
 			break;
 		case EResourceType::ResourceType_Wheat:
-			resourceToGive.numWheat = 1;
+			resourcesWantedByCurrPlayer.numWheat = 1;
 			break;
 		case EResourceType::ResourceType_Sheep:
-			resourceToGive.numSheep = 1;
+			resourcesWantedByCurrPlayer.numSheep = 1;
 			break;
 	}
 
 	FTradeOffer offerAccepted = playerAccepting->getNextTradeOffer();
 	uint8 playerOfferingNum = offerAccepted.playerNum;
-	FResources resourcesOffered = offerAccepted.resourcesToTrade; // resources offered to the trade intiater for the desired resource
+	FResources resourcesWantedByOfferingPlayer = offerAccepted.resourcesToTrade; // resources offered to the trade intiater for the desired resource
 
 	ACatanPlayerState * playerOffering = dynamic_cast<ACatanPlayerState *>(gameState->PlayerArray[playerOfferingNum - 1]);
 
-	playerOffering->giveResources(resourcesOffered);
-	playerOffering->takeResources(resourceToGive);
+	playerOffering->giveResources(resourcesWantedByOfferingPlayer);
+	playerOffering->takeResources(resourcesWantedByCurrPlayer);
 
-	playerAccepting->giveResources(resourceToGive);
-	playerAccepting->takeResources(resourcesOffered);
+	playerAccepting->giveResources(resourcesWantedByCurrPlayer);
+	playerAccepting->takeResources(resourcesWantedByOfferingPlayer);
 
 	//remove remaining trade offers
 	while (playerAccepting->hasTradeOffer()) {
