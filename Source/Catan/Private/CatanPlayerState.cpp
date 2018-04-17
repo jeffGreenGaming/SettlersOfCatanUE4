@@ -178,10 +178,20 @@ bool ACatanPlayerState::removeTradeOfferClient_Validate(uint8 playerNum) {
 }
 
 FTradeOffer ACatanPlayerState::getNextTradeOffer() {
-	if (currentTradeOffers.Num() >= 0) {
+	if (currentTradeOffers.Num() > 0) {
 		return currentTradeOffers[0];
 	}
 	return FTradeOffer{ 0,0 };
+}
+
+void ACatanPlayerState::removeCurrentTradeOffer() {
+	if (currentTradeOffers.Num() > 0) {
+		currentTradeOffers.RemoveAt(0);
+	}
+}
+
+bool ACatanPlayerState::hasTradeOffer() {
+	return currentTradeOffers.Num() > 0;
 }
 
 void ACatanPlayerState::addPort_Implementation(EPort newPort) {

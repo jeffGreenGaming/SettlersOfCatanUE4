@@ -62,6 +62,8 @@ public:
 
 	void sendOffer(ACatanPlayerState * playerSending, FResources resourceToTrade);
 
+	void acceptOffer(ACatanPlayerState * playerAccepting);
+
 private:
 	EGamePhase gamePhase;
 

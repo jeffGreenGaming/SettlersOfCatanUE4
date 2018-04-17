@@ -135,6 +135,11 @@ void ACatanPlayerController::clickOfferTrade(FResources resourceOffered) {
 	sendOfferServer(playerState, resourceOffered);
 }
 
+void ACatanPlayerController::clickAcceptOffer() {
+	ACatanPlayerState * playerState = (ACatanPlayerState *)PlayerState;
+	sendAcceptTradeServer(playerState);
+}
+
 bool ACatanPlayerController::isLastPlacedRoadNull() {
 	return lastPlacedRoad == nullptr;
 }
@@ -512,6 +517,15 @@ void ACatanPlayerController::sendOfferServer_Implementation(ACatanPlayerState * 
 }
 
 bool ACatanPlayerController::sendOfferServer_Validate(ACatanPlayerState * catanPlayerState, FResources resourceToGive) {
+	return true;
+}
+
+void ACatanPlayerController::sendAcceptTradeServer_Implementation(ACatanPlayerState * playerAccepting) {
+	ACatanGameMode* gameMode = (ACatanGameMode*)GetWorld()->GetAuthGameMode();
+	gameMode->acceptOffer(playerAccepting);
+}
+
+bool ACatanPlayerController::sendAcceptTradeServer_Validate(ACatanPlayerState * playerAccepting) {
 	return true;
 }
 

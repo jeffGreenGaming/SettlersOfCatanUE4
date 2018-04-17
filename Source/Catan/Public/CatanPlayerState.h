@@ -87,6 +87,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
 	FTradeOffer getNextTradeOffer();
 
+	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
+	void removeCurrentTradeOffer();
+
+	UFUNCTION(BlueprintCallable, Category = "CatanPlayerStateFunctions")
+	bool hasTradeOffer();
+
 	//only the client cares about what ports we have
 	UFUNCTION(Client, Reliable, WithValidation)
 	void addPort(EPort newPort);

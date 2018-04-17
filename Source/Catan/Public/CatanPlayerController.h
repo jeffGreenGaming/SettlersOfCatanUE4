@@ -74,6 +74,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
 	void clickOfferTrade(FResources resourceOffered);
 
+	//Function for accepting a given trade offer
+	UFUNCTION(BlueprintCallable, Category = "ClickFunctions")
+	void clickAcceptOffer();
+
 	// used to check if we actually placed a road last turn or not
 	UFUNCTION(BlueprintCallable, Category = "RoadPlacementFunctions")
 	bool isLastPlacedRoadNull();
@@ -136,6 +140,9 @@ public:
 
 	UFUNCTION(Reliable, Server, WithValidation)
 	void sendOfferServer(ACatanPlayerState * catanPlayerState, FResources resourceToGive);
+
+	UFUNCTION(Reliable, Server, WithValidation)
+	void sendAcceptTradeServer(ACatanPlayerState * playerAccepting);
 
 	void updateSelection();
 
