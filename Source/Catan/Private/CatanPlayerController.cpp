@@ -532,29 +532,32 @@ bool ACatanPlayerController::sendAcceptTradeServer_Validate(ACatanPlayerState * 
 
 void ACatanPlayerController::updateSelection() {
 
-	FHitResult hitResult;
+	//make sure we are not in the middle of placing a road (will mess up where the game "thinks" the road is)
+	if (lastPlacedRoad == nullptr) {
+		FHitResult hitResult;
 
-	GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Camera), false, hitResult);
+		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Camera), false, hitResult);
 
-	ATile* clickedTile = dynamic_cast<ATile *>(hitResult.GetActor());
+		ATile* clickedTile = dynamic_cast<ATile *>(hitResult.GetActor());
 
-	if (clickedTile != nullptr) {
-		selectionCol = clickedTile->getColPos();
-		selectionRow = clickedTile->getRowPos();
-		selectedVertex = clickedTile->getClosestVertex(hitResult.ImpactPoint);
-		vertexBeam->SetWorldLocation(getPlacementLocation(selectedVertex, clickedTile->GetActorLocation()));
+		if (clickedTile != nullptr) {
+			selectionCol = clickedTile->getColPos();
+			selectionRow = clickedTile->getRowPos();
+			selectedVertex = clickedTile->getClosestVertex(hitResult.ImpactPoint);
+			vertexBeam->SetWorldLocation(getPlacementLocation(selectedVertex, clickedTile->GetActorLocation()));
+		}
+
+		TArray<AActor*> Tiles;
+
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATile::StaticClass(), Tiles);
+		for (int i = 0; i < Tiles.Num(); i++) {
+			ATile * tile = dynamic_cast<ATile*>(Tiles[i]);
+			tile->highlightTile(false);
+		}
+
+
+		highlightTiles();
 	}
-
-	TArray<AActor*> Tiles;
-
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATile::StaticClass(), Tiles);
-	for (int i = 0; i < Tiles.Num(); i++) {
-		ATile * tile = dynamic_cast<ATile*>(Tiles[i]);
-		tile->highlightTile(false);
-	}
-
-
-	highlightTiles();
 
 }
 
