@@ -46,10 +46,13 @@ public:
 
 	bool hasPossibleRoadConnection();
 
+	UFUNCTION(BlueprintCallable, Category = "PlaceableAreaFunctions")
 	TArray<ATile *> getConnectedTiles();
 
+	UFUNCTION(BlueprintCallable, Category = "PlaceableAreaFunctions")
 	bool hasPort();
 
+	UFUNCTION(BlueprintCallable, Category = "PlaceableAreaFunctions")
 	EPort getPort();
 
 private:

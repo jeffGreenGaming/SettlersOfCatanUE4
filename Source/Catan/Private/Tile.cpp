@@ -166,3 +166,7 @@ void ATile::setResourceType(EResourceType resourceType) {
 EResourceType ATile::getTileType() {
 	return tileType;
 }
+
+uint8 ATile::getRollValue() {
+	return rollValue;
+}

@@ -148,7 +148,8 @@ public:
 
 	void rotateRoad();
 
-
+	UFUNCTION(BlueprintCallable, Category = "PlaceableAreaFunctions")
+	APlaceableArea * getSelectedPlaceableArea();
 
 private:
 

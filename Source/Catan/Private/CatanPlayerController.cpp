@@ -654,3 +654,14 @@ FVector ACatanPlayerController::getPlacementLocation(EVertex vertex, FVector til
 		location.Z = location.Z + 1.0f;
 		return location;
 }
+
+APlaceableArea * ACatanPlayerController::getSelectedPlaceableArea() {
+	ACatanGameState* gameState = (ACatanGameState*)GetWorld()->GetGameState();
+	ATile * selectedTile = gameState->getTileFromCoordinates(selectionRow, selectionCol);
+	if (selectedTile != nullptr) {
+		return selectedTile->getPlaceableAreaAtVertex(selectedVertex);
+	}
+	else {
+		return nullptr;
+	}
+}

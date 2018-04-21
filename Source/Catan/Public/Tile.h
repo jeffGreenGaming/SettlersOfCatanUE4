@@ -70,7 +70,11 @@ public:
 
 	APlaceableArea * getPlaceableAreaAtVertex(EVertex vertex);
 
+	UFUNCTION(BlueprintCallable, Category = "TileFunctions")
 	EResourceType getTileType();
+
+	UFUNCTION(BlueprintCallable, Category = "TileFunctions")
+	uint8 getRollValue();
 
 
 
