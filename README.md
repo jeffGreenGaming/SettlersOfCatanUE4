@@ -4,3 +4,5 @@ Implementation of Settlers of Catan in the Unreal 4 Game Engine.
 This is a networked implementation of the classic game Settlers of Catan. It is completely written by myself and all assets are also created by me.
 </br>
 This is in no way meant to be distributed and is for my own development purposes as well as being played amongst my friends.
+</br>
+Currently built using UE 4.9.2 
